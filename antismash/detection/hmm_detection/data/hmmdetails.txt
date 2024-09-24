@@ -366,3 +366,42 @@ AesA	N-((2S)-2-amino-2-carboxyethyl)-L-glutamate dehydrogenase involved in APCA 
 AesB	Pyridoxal-dependent decarboxylase involved in APCA biosynthesis	400	AesB.hmm
 AesC	N-(2-amino-2-carboxyethyl)-L-glutamate synthase involved in APCA biosynthesis	420	AesC.hmm
 4HBT_2	Hotdog fold Thioesterase-like superfamily	25	PF13279.hmm
+PT_phytoene_like	Prenyltransferase; Phytoene synthase like	20	PT_phytoene_like.hmm
+PT_diapophytoene	Prenyltransferase; Diapophytoene synthase	264	PT_diapophytoene.hmm
+PT_PSPP	Prenyltransferase; Presqualene diphosphate synthase	213	PT_PSPP.hmm
+PT_squalene	Prenyltransferase; Squalene synthase	257	PT_squalene.hmm
+PT_GGPPS_like	Prenyltransferase; Geranylgeranyl diphosphate synthase like	47	PT_GGPPS_like.hmm
+PT_HPP	Prenyltransferase; Hexaprenyl diphosphate synthase	139	PT_HPP.hmm
+PT_GGI	Prenyltransferase; 3-Geranylgeranylindole synthase	256	PT_GGI.hmm
+PT_GFPP_a	Prenyltransferase; Geranylfarnesyl diphosphate synthase, group a	433	PT_GFPP_a.hmm
+PT_GFPP_b	Prenyltransferase; Geranylfarnesyl diphosphate synthase, group b	397	PT_GFPP_b.hmm
+PT_GFPP_c	Prenyltransferase; Geranylfarnesyl diphosphate synthase, group c	362	PT_GFPP_c.hmm
+PT_GGPP	Prenyltransferase; Geranylgeranyl diphosphate synthase	350	PT_GGPP.hmm
+T1TS	Type 1 terpene synthase	15	T1TS.hmm
+T1TS_HYPB	Type 1 terpene synthase; Hypoxylon sp. 1,8-cineole synthase type	166	T1TS_HYPB.hmm
+T1TS_ARIS	Type 1 terpene synthase; Aristolochene synthase type	259	T1TS_ARIS.hmm
+T1TS_III-IV_a	Type 1 terpene synthase; Cyclising at double bonds III and IV, group a	355	T1TS_III-IV_a.hmm
+T1TS_III-IV_b	Type 1 terpene synthase; Cyclising at double bonds III and IV, group b	325	T1TS_III-IV_b.hmm
+T1TS_III-IV_c	Type 1 terpene synthase; Cyclising at double bonds III and IV, group c	380	T1TS_III-IV_c.hmm
+T1TS_IV-V_a	Type 1 terpene synthase; Cyclising at double bonds IV and V, group a	433	T1TS_IV-V_a.hmm
+T1TS_IV-V_b	Type 1 terpene synthase; Cyclising at double bonds IV and V, group b	354	T1TS_IV-V_b.hmm
+T1TS_IV-V_c	Type 1 terpene synthase; Cyclising at double bonds IV and V, group c	360	T1TS_IV-V_c.hmm
+T1TS_TRI	Type 1 terpene synthase; Trichodiene synthase type	228	T1TS_TRI.hmm
+T1TS_Bas_a	Type 1 terpene synthase; Basidiomycete group a	342	T1TS_Bas_a.hmm
+T1TS_Bas_b	Type 1 terpene synthase; Basidiomycete group b	250	T1TS_Bas_b.hmm
+T1TS_Bas_c	Type 1 terpene synthase; Basidiomycete group c	411	T1TS_Bas_c.hmm
+T1TS_CEABS	Type 1 terpene synthase; Corvol ether A and B synthase type	295	T1TS_CEABS.hmm
+T1TS_LATES	Type 1 terpene synthase; Labdatriene synthase type	142	T1TS_LATES.hmm
+T1TS_MIBS	Type 1 terpene synthase; 2-Methylisoborneol synthase type	210	T1TS_MIBS.hmm
+T1TS_GERAS	Type 1 terpene synthase; Germacrene A synthase type	250	T1TS_GERAS.hmm
+T1TS_IAFRS	Type 1 terpene synthase; Isoafricanol synthase type	361	T1TS_IAFRS.hmm
+T1TS_geosC	Type 1 terpene synthase; Geosmin synthase, C terminal domain	386	T1TS_geosC.hmm
+T1TS_geosN	Type 1 terpene synthase; Geosmin synthase, N terminal domain	337	T1TS_geosN.hmm
+T2TS	Type 2 terpene synthase	64	T2TS.hmm
+T2TS_C15_a	Type 2 terpene synthase; Sesquiterpene synthase, group a	219	T2TS_C15_a.hmm
+T2TS_C15_b	Type 2 terpene synthase; Sesquiterpene synthase, group b	318	T2TS_C15_b.hmm
+T2TS_C20	Type 2 terpene synthase; Diterpene synthase	167	T2TS_C20.hmm
+T2TS_hopanoid	Type 2 terpene synthase; Hopanoid synthase	339	T2TS_hopanoid.hmm
+T2TS_steroid	Type 2 terpene synthase; Steroid synthase	539	T2TS_steroid.hmm
+TS_UbiA	UbiA type terpene synthase	117	TS_UbiA.hmm
+HAD_2	Haloacid dehalogenase-like hydrolase	15	PF13419.hmm

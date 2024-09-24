@@ -182,6 +182,18 @@ RULE terpene
                or terpene_cyclase or NapT7 or fung_ggpps or fung_ggpps2
                or trichodiene_synth or TRI5
 
+RULE terpene_new
+    CATEGORY terpene
+    DESCRIPTION Terpene New Module
+    RELATED PT_diapophytoene, PT_PSPP, PT_squalene, PT_HPP, PT_GGI, PT_GFPP_a, PT_GFPP_b,
+    PT_GFPP_c, PT_GGPP, T1TS_HYPB, T1TS_ARIS, T1TS_III-IV_a, T1TS_III-IV_b, T1TS_III-IV_c,
+    T1TS_IV-V_a, T1TS_IV-V_b, T1TS_IV-V_c, T1TS_TRI, T1TS_Bas_a, T1TS_Bas_b, T1TS_Bas_c, T1TS_CEABS,
+    T1TS_LATES, T1TS_MIBS, T1TS_GERAS, T1TS_IAFRS, T1TS_geosC, T1TS_geosN, T2TS_C15_a, T2TS_C15_b,
+    T2TS_C20, T2TS_hopanoid, T2TS_steroid, HAD_2
+    CUTOFF 20
+    NEIGHBOURHOOD 10
+    CONDITIONS PT_phytoene_like or phytoene_synt or Lycopene_cycl or PT_GGPPS_like or T1TS or T2TS or TS_UbiA
+
 DEFINE all_YcaO AS (YcaO or TIGR03604)
 
 RULE lanthipeptide-class-i
