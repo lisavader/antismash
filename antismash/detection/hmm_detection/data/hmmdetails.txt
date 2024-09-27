@@ -405,3 +405,4 @@ T2TS_hopanoid	Type 2 terpene synthase; Hopanoid synthase	339	T2TS_hopanoid.hmm
 T2TS_steroid	Type 2 terpene synthase; Steroid synthase	539	T2TS_steroid.hmm
 TS_UbiA	UbiA type terpene synthase	117	TS_UbiA.hmm
 HAD_2	Haloacid dehalogenase-like hydrolase	15	PF13419.hmm
+Pyr4	Pyr4 type terpene synthase	100	Pyr4.hmm
