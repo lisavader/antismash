@@ -1,5 +1,5 @@
 HMMER3/f [3.3.2 | Nov 2020]
-NAME  T2TS_steroid
+NAME  T2TS_oxidosqualene
 LENG  724
 ALPH  amino
 RF    no
@@ -14,7 +14,7 @@ CKSUM 891451355
 STATS LOCAL MSV      -12.4201  0.69653
 STATS LOCAL VITERBI  -13.3216  0.69653
 STATS LOCAL FORWARD   -6.5349  0.69653
-HMM          A        C        D        E        F        G        H        I        K        L        M        N        P        Q        R        S        T        V        W        Y   
+HMM          A        C        D        E        F        G        H        I        K        L        M        N        P        Q        R        S        T        V        W        Y
             m->m     m->i     m->d     i->m     i->i     d->m     d->d
   COMPO   2.54115  4.18384  3.02381  2.67860  3.22757  2.85895  3.73535  2.84071  2.74359  2.44884  3.59960  3.09963  3.33768  3.08347  2.97280  2.68765  2.85774  2.65432  3.93467  3.25637
           2.68566  4.42266  2.77520  2.73141  3.46395  2.40518  3.72536  3.29376  2.67760  2.69374  4.24428  2.90374  2.73742  3.18187  2.89788  2.37857  2.77492  2.98524  4.58447  3.61544
