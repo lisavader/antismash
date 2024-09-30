@@ -368,6 +368,7 @@ AesC	N-(2-amino-2-carboxyethyl)-L-glutamate synthase involved in APCA biosynthes
 4HBT_2	Hotdog fold Thioesterase-like superfamily	25	PF13279.hmm
 PT_phytoene_like	Prenyltransferase; Phytoene synthase like	20	PT_phytoene_like.hmm
 PT_diapophytoene	Prenyltransferase; Diapophytoene synthase	264	PT_diapophytoene.hmm
+PT_hydroxysqualene	Prenyltransferase; Hydroxysqualene synthase	100	PT_hydroxysqualene.hmm
 PT_PSPP	Prenyltransferase; Presqualene diphosphate synthase	213	PT_PSPP.hmm
 PT_squalene	Prenyltransferase; Squalene synthase	257	PT_squalene.hmm
 PT_GGPPS_like	Prenyltransferase; Geranylgeranyl diphosphate synthase like	47	PT_GGPPS_like.hmm
