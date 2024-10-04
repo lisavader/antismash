@@ -192,7 +192,7 @@ RULE terpene_new
     T2TS_C20, T2TS_squalene, T2TS_oxidosqualene, HAD_2
     CUTOFF 20
     NEIGHBOURHOOD 10
-    CONDITIONS PT_phytoene_like or phytoene_synt or TIGR03462 or PT_GGPPS_like or T1TS or T2TS
+    CONDITIONS PT_phytoene_like or phytoene_synt or Lycopene_cyclase or PT_GGPPS_like or T1TS or T2TS
                or TS_UbiA or TS_Pyr4
 
 DEFINE all_YcaO AS (YcaO or TIGR03604)
