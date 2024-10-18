@@ -187,15 +187,6 @@ RULE mycosporine-like
 RULE terpene
     CATEGORY terpene
     DESCRIPTION Terpene
-    CUTOFF 20
-    NEIGHBOURHOOD 10
-    CONDITIONS Terpene_synth or Terpene_synth_C or phytoene_synt or Lycopene_cycl
-               or terpene_cyclase or NapT7 or fung_ggpps or fung_ggpps2
-               or trichodiene_synth or TRI5
-
-RULE terpene_new
-    CATEGORY terpene
-    DESCRIPTION Terpene new rule
     RELATED HAD_2
     CUTOFF 20
     NEIGHBOURHOOD 10
