@@ -384,3 +384,12 @@ LPG_synthase_C	Phosphatidylglycerol lysyltransferase, C-terminal	27	PF09924.hmm
 azdH_alignment	azdH	50	azdh.hmm
 azdO	azdO/vlmO	50	azdO.hmm
 Ketoacyl-synt_2	Ketoacyl-synt_2	25	PF13723.hmm
+PT_phytoene_like	Prenyltransferase; Phytoene synthase like	20	PT_phytoene_like.hmm
+PT_FPPS_like	Prenyltransferase; Farnesyl diphosphate synthase like	56	PT_FPPS_like.hmm
+T1TS	Type 1 terpene synthase	15	T1TS.hmm
+T1TS_KS	Type 1 terpene synthase; Ent-kaurene synthase type	200	T1TS_KS.hmm
+T2TS	Type 2 terpene synthase	45	T2TS.hmm
+TS_UbiA	UbiA type terpene synthase	117	TS_UbiA.hmm
+HAD_2	Haloacid dehalogenase-like hydrolase	15	PF13419.hmm
+TS_Pyr4	Pyr4 type terpene synthase	100	TS_Pyr4.hmm
+Lycopene_cycl_fung	Lycopene cyclase domain; fungal	40	TIGR03462.hmm
