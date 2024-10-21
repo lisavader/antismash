@@ -14,6 +14,7 @@ from antismash.config import ConfigType
 from antismash.config.args import ModuleArgs
 
 from .results import TerpeneResults
+from .terpene_analysis import analyse_cluster
 
 NAME = "terpene"
 SHORT_DESCRIPTION = "Terpene analysis"
@@ -108,7 +109,6 @@ def prepare_data(logging_only: bool = False) -> List[str]:
 
     return failure_messages
 
-
 def regenerate_previous_results(previous: Dict[str, Any], record: Record,
                                 _options: ConfigType) -> Optional[TerpeneResults]:
     """ Regenerate the previous results from JSON format.
@@ -143,5 +143,14 @@ def run_on_record(record: Record, results: TerpeneResults, options: ConfigType) 
         return results
 
     results = TerpeneResults(record.id)
+
+    terpene_clusters = [cluster for cluster in record.get_protoclusters() if cluster.product == 'terpene']
+    if not terpene_clusters:
+        logging.debug("No terpene clusters to analyse")
+        return results
+
+    logging.info("Analysing terpene clusters")
+    for cluster in terpene_clusters:
+        results.cluster_predictions[cluster.get_protocluster_number()] = analyse_cluster(cluster)
 
     return results
