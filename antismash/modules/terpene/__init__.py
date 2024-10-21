@@ -4,8 +4,11 @@
 """ Terpene analysis module
 """
 
+import logging
+import os
 from typing import Any, Dict, List, Optional
 
+from antismash.common import hmmer, path
 from antismash.common.secmet import Record
 from antismash.config import ConfigType
 from antismash.config.args import ModuleArgs
@@ -44,6 +47,64 @@ def check_prereqs(options: ConfigType) -> List[str]:
     for binary_name in ["hmmsearch", "hmmpress"]:
         if binary_name not in options.executables:
             failure_messages.append(f"Failed to locate executable for {binary_name!r}")
+
+    # no point checking the data if we can't use it
+    if failure_messages:
+        return failure_messages
+
+    failure_messages.extend(prepare_data(logging_only=True))
+
+    return failure_messages
+
+
+def prepare_data(logging_only: bool = False) -> List[str]:
+    """ Ensures packaged data is fully prepared
+
+        Arguments:
+            logging_only: whether to return error messages instead of raising exceptions
+
+        Returns:
+            a list of error messages (only if logging_only is True)
+    """
+    failure_messages = []
+
+    # the hmm files that need to be present in data
+    names = ["PT_FPPS_like", "PT_phytoene_like", "T1TS", "T2TS"]
+    hmm_files = [path.get_full_path(__file__, "data", "subprofiles_" + name + ".hmm") for name in names]
+
+    # the path to the markov model
+    all_hmms = path.get_full_path(__file__, 'data', 'subprofiles_all.hmm')
+
+    outdated = False
+    if not path.locate_file(all_hmms):
+        logging.debug("%s: %s doesn't exist, regenerating", NAME, all_hmms)
+        outdated = True
+    else:
+        all_hmms_timestamp = os.path.getmtime(all_hmms)
+        for component in hmm_files:
+            if os.path.getmtime(component) > all_hmms_timestamp:
+                logging.debug("%s out of date, regenerating", all_hmms)
+                outdated = True
+                break
+
+    # regenerate if missing or out of date
+    if outdated:
+        # try to generate file from hmm files in data directory
+        try:
+            with open(all_hmms, "w", encoding="utf-8") as all_hmms_handle:
+                for hmm_file in hmm_files:
+                    with open(path.get_full_path(__file__, hmm_file), "r", encoding="utf-8") as handle:
+                        all_hmms_handle.write(handle.read())
+        except OSError:
+            if not logging_only:
+                raise
+            failure_messages.append(f"Failed to generate file {all_hmms!r}")
+
+    # if regeneration failed, don't try to run hmmpress
+    if failure_messages:
+        return failure_messages
+
+    failure_messages.extend(hmmer.ensure_database_pressed(all_hmms, return_not_raise=logging_only))
 
     return failure_messages
 
