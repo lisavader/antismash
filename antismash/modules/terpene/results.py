@@ -6,9 +6,54 @@
 import logging
 from typing import Any, Dict, List, Optional, Union
 from typing import Tuple
+from dataclasses import dataclass
 
 from antismash.common.module_results import ModuleResults
 from antismash.common.secmet import Record
+
+
+@dataclass(frozen = True)
+class CompoundGroup():
+    """ Biosynthetic and chemical properties for a group of compounds.
+    """
+    name: str
+    extended_name: str
+    single_compound: bool
+    biosynthetic_class: str
+    biosynthetic_subclass: str
+    chain_length: int
+    initial_cyclisations: list[str]
+    functional_groups: list[str]
+
+    @staticmethod
+    def from_json(name: str, data: dict[str, Any]) -> "CompoundGroup":
+        """ Reconstructs an instance from a JSON representation """
+        return CompoundGroup(name, **data)
+
+
+@dataclass(frozen = True)
+class TerpeneHMM:
+    """ Properties associated with a terpene hmm profile
+    """
+    name: str
+    description: str
+    cutoff: int
+    main_profile: bool
+    predictions: dict[str, list[CompoundGroup]]
+
+    def from_json(name: str, hmm_json: Dict[str, Any], compounds_json: dict[dict[str, Any]]) -> "TerpeneHMM":
+        """ Reconstructs an instance from a JSON representation """
+        predictions = {}
+        compound_groups = []
+        for pred in hmm_json["predictions"]:
+            for field, group_names in pred.items():
+                for group_name in group_names:
+                    try:
+                        compound_groups.append(CompoundGroup.from_json(group_name, compounds_json[group_name]))
+                    except KeyError as err:
+                        raise ValueError(f"Compound group {err} does not exist.")
+            predictions[field] = compound_groups
+        return TerpeneHMM(name, hmm_json["description"], hmm_json["cutoff"], hmm_json["main_profile"], predictions)
 
 
 class DomainPrediction:

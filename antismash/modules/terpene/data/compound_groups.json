@@ -1,0 +1,638 @@
+{
+    "2-MeGPP": {
+        "extended_name": "2-methylgeranyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "monoterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 11,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "2-methylenebornane": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "monoterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 11,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": []
+    },
+    "2-methylisoborneol": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "monoterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 11,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "acoradiene": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": []
+    },
+    "aristolochene": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C10"
+        ],
+        "functional_groups": []
+    },
+    "cyclic_indole_diterpenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": "indole diterpenoid",
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "unknown"
+        ],
+        "functional_groups": [
+            "indole",
+            "OH"
+        ]
+    },
+    "cyclic_meroditerpenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": "meroditerpenoid",
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "unknown"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "cyclic_merosesquiterpenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": "merosesquiterpenoid",
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "unknown"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "C40_carotenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "tetraterpene",
+        "biosynthetic_subclass": "C40 carotenoid",
+        "chain_length": 40,
+        "initial_cyclisations": [
+            "unknown"
+        ],
+        "functional_groups": [
+            "unknown"
+        ]
+    },
+    "diapophytoene": {
+        "extended_name": "4,4'-diapophytoene",
+        "single_compound": true,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "C30 carotenoid",
+        "chain_length": 30,
+        "initial_cyclisations": [],
+        "functional_groups": []
+    },
+    "diterpene": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "unknown"
+        ],
+        "functional_groups": [
+            "unknown"
+        ]
+    },
+    "diterpene_C1-C11/C10-C14": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "C1-C11",
+            "C10-C14"
+        ],
+        "functional_groups": []
+    },
+    "diterpene_C1-C6": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": []
+    },
+    "diterpene_C1-C7/C6-C10": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "C1-C7",
+            "C6-C10"
+        ],
+        "functional_groups": []
+    },
+    "diterpene_C6-C11/C10-C15": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "C6-C11",
+            "C10-C15"
+        ],
+        "functional_groups": []
+    },
+    "diterpene_C6-C11/C10-C15_PP": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [
+            "C6-C11",
+            "C10-C15"
+        ],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "DMAPP": {
+        "extended_name": "dimethylallyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "hemiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 5,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "epoxy_indole_diterpenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": "indole diterpenoid",
+        "chain_length": 20,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "indole",
+            "epoxy"
+        ]
+    },
+    "epoxy_meroditerpenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": "meroditerpenoid",
+        "chain_length": 20,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "epoxy"
+        ]
+    },
+    "epoxy_merosesquiterpenoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": "merosesquiterpenoid",
+        "chain_length": 15,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "epoxy"
+        ]
+    },
+    "epoxy_polypodane": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "polypodane",
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "polypodane skeleton"
+        ],
+        "functional_groups": [
+            "epoxy"
+        ]
+    },
+    "FPP": {
+        "extended_name": "farnesyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "geosmin": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 12,
+        "initial_cyclisations": [
+            "C1-C10"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "germacradienol": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C10"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "GFPP": {
+        "extended_name": "geranylfarnesyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "sesterterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 25,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "GGI": {
+        "extended_name": "geranylgeranyl indole",
+        "single_compound": true,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": "indole diterpenoid",
+        "chain_length": 20,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "indole"
+        ]
+    },
+    "GGPP": {
+        "extended_name": "geranylgeranyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "diterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 20,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "GPP": {
+        "extended_name": "geranyl diphoshate",
+        "single_compound": true,
+        "biosynthetic_class": "monoterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 10,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "hopanoid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "hopanoid",
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "hopanoid skeleton"
+        ],
+        "functional_groups": [
+            "unknown"
+        ]
+    },
+    "HPP": {
+        "extended_name": "hexaprenyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 30,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "hydroxysqualene": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 30,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "IPP": {
+        "extended_name": "isopentenyl diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "hemiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 5,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "monoterpene_C1-C10": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "monoterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 10,
+        "initial_cyclisations": [
+            "C1-C10"
+        ],
+        "functional_groups": []
+    },
+    "monoterpene_C1-C6": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "monoterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 10,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": []
+    },
+    "onoceroid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "onoceroid",
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "unknown"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "oxidosqualene": {
+        "extended_name": "2,3-oxidosqualene",
+        "single_compound": true,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "steroid",
+        "chain_length": 30,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "epoxy"
+        ]
+    },
+    "phytoene": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "tetraterpene",
+        "biosynthetic_subclass": "C40 carotenoid",
+        "chain_length": 40,
+        "initial_cyclisations": [],
+        "functional_groups": []
+    },
+    "polypodane": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "polypodane",
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "polypodane skeleton"
+        ],
+        "functional_groups": [
+            "unknown"
+        ]
+    },
+    "PSPP": {
+        "extended_name": "presqualene diphosphate",
+        "single_compound": true,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 30,
+        "initial_cyclisations": [],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "sesquiterpene_C1-C10": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C10"
+        ],
+        "functional_groups": []
+    },
+    "sesquiterpene_C1-C11": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C11"
+        ],
+        "functional_groups": []
+    },
+    "sesquiterpene_C1-C6": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": []
+    },
+    "sesquiterpene_C2-C7/C6-C11_OH": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C2-C7",
+            "C6-C11"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "sesquiterpene_C2-C7/C6-C11_PP": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C2-C7",
+            "C6-C11"
+        ],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "sesquiterpene_C6-C11_OH": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C6-C11"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "sesquiterpene_C6-C11_PP": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C6-C11"
+        ],
+        "functional_groups": [
+            "PP"
+        ]
+    },
+    "sesterterpene_C1-C11/C10-C14": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesterterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 25,
+        "initial_cyclisations": [
+            "C1-C11",
+            "C10-C14"
+        ],
+        "functional_groups": []
+    },
+    "sesterterpene_C1-C15/C14-C18": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesterterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 25,
+        "initial_cyclisations": [
+            "C1-C15",
+            "C14-C18"
+        ],
+        "functional_groups": []
+    },
+    "sesterterpene_C1-C7/C6-C10": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "sesterterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 25,
+        "initial_cyclisations": [
+            "C1-C7",
+            "C6-C10"
+        ],
+        "functional_groups": []
+    },
+    "squalene": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 30,
+        "initial_cyclisations": [],
+        "functional_groups": []
+    },
+    "steroid": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": "steroid",
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "steroid skeleton"
+        ],
+        "functional_groups": [
+            "OH"
+        ]
+    },
+    "trichodiene": {
+        "extended_name": null,
+        "single_compound": true,
+        "biosynthetic_class": "sesquiterpene",
+        "biosynthetic_subclass": "trichothecene",
+        "chain_length": 15,
+        "initial_cyclisations": [
+            "C1-C6"
+        ],
+        "functional_groups": []
+    },
+    "triterpene_C1-C11/C10-C14": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "C1-C11",
+            "C10-C14"
+        ],
+        "functional_groups": []
+    },
+    "triterpene_C1-C14": {
+        "extended_name": null,
+        "single_compound": false,
+        "biosynthetic_class": "triterpene",
+        "biosynthetic_subclass": null,
+        "chain_length": 30,
+        "initial_cyclisations": [
+            "C1-C14"
+        ],
+        "functional_groups": []
+    }
+}

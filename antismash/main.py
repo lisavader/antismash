@@ -601,7 +601,7 @@ def check_prerequisites(modules: List[AntismashModule], options: ConfigType) -> 
     if errors_by_module:
         for module_name, errors_found in errors_by_module.items():
             for error in errors_found:
-                logging.error("%s: preqrequisite failure: %s", module_name, error)
+                logging.error("%s: prerequisite failure: %s", module_name, error)
         raise RuntimeError("Modules failing prerequisites")
 
 

@@ -14,7 +14,7 @@ from antismash.config import ConfigType
 from antismash.config.args import ModuleArgs
 
 from .results import TerpeneResults
-from .terpene_analysis import analyse_cluster
+from .terpene_analysis import get_hmm_properties, analyse_cluster
 
 NAME = "terpene"
 SHORT_DESCRIPTION = "Terpene analysis"
@@ -69,12 +69,20 @@ def prepare_data(logging_only: bool = False) -> List[str]:
     """
     failure_messages = []
 
-    # the hmm files that need to be present in data
-    names = ["PT_FPPS_like", "PT_phytoene_like", "T1TS", "T2TS"]
-    hmm_files = [path.get_full_path(__file__, "data", "subprofiles_" + name + ".hmm") for name in names]
+    # Check if hmm_properties.json and compound_keys.json are well-formatted
+    try:
+        get_hmm_properties()
+    except ValueError as err:
+        if not logging_only:
+            raise
+        failure_messages.append(err)
 
-    # the path to the markov model
-    all_hmms = path.get_full_path(__file__, 'data', 'subprofiles_all.hmm')
+    # the hmm files that need to be present in data
+    hmm_names = ["main","PT_FPPS_like", "PT_phytoene_like", "T1TS", "T2TS"]
+    hmm_files = [path.get_full_path(__file__, "data", name + "_profiles" + ".hmm") for name in hmm_names]
+
+    # the path to the combined data file of all hmms
+    all_hmms = path.get_full_path(__file__, 'data', 'all_profiles.hmm')
 
     outdated = False
     if not path.locate_file(all_hmms):
@@ -108,6 +116,7 @@ def prepare_data(logging_only: bool = False) -> List[str]:
     failure_messages.extend(hmmer.ensure_database_pressed(all_hmms, return_not_raise=logging_only))
 
     return failure_messages
+
 
 def regenerate_previous_results(previous: Dict[str, Any], record: Record,
                                 _options: ConfigType) -> Optional[TerpeneResults]:
