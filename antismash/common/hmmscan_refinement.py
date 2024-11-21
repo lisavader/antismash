@@ -254,7 +254,8 @@ def gather_by_query(results: List[HSP]) -> Dict[str, Set[HMMResult]]:
 
 
 def refine_hmmscan_results(hmmscan_results: List[QueryResult], hmm_lengths: Dict[str, int],
-                           neighbour_mode: bool = False) -> Dict[str, List[HMMResult]]:
+                           neighbour_mode: bool = False,
+                           remove_incomplete_only: bool = False) -> Dict[str, List[HMMResult]]:
     """ Processes a list of QueryResult objects (from SearchIO.parse(..., 'hmmer3-text'))
             - merges domain fragments of the same ID
             - keeps only best hits from overlaps
@@ -265,6 +266,8 @@ def refine_hmmscan_results(hmmscan_results: List[QueryResult], hmm_lengths: Dict
             hmm_lengths: a dictionary mapping hmm id to length
             neighbour_mode: if on, does overlap removal before merge and merges
                             only when the next result has the same hit_id
+            remove_incomplete_only: if on, only removes incomplete domains without
+                            merging or overlap removal
 
         Returns:
             a mapping of gene name to list of HMMResults
@@ -278,7 +281,7 @@ def refine_hmmscan_results(hmmscan_results: List[QueryResult], hmm_lengths: Dict
             refined = _remove_overlapping(refined, hmm_lengths)
             # Merge domain fragments which are really one domain
             refined = _merge_immediate_neigbours(refined, hmm_lengths)
-        else:
+        elif not remove_incomplete_only:
             # Merge domain fragments which are really one domain
             refined = _merge_domain_list(refined, hmm_lengths)
             # Only keep best hits for overlapping domains

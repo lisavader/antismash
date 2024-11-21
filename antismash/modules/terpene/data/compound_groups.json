@@ -1,5 +1,6 @@
-{
-    "2-MeGPP": {
+[
+    {
+        "name": "2-MeGPP",
         "extended_name": "2-methylgeranyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "monoterpene",
@@ -10,7 +11,8 @@
             "PP"
         ]
     },
-    "2-methylenebornane": {
+    {
+        "name": "2-methylenebornane",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "monoterpene",
@@ -21,7 +23,8 @@
         ],
         "functional_groups": []
     },
-    "2-methylisoborneol": {
+    {
+        "name": "2-methylisoborneol",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "monoterpene",
@@ -34,7 +37,8 @@
             "OH"
         ]
     },
-    "acoradiene": {
+    {
+        "name": "acoradiene",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "sesquiterpene",
@@ -45,7 +49,8 @@
         ],
         "functional_groups": []
     },
-    "aristolochene": {
+    {
+        "name": "aristolochene",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "sesquiterpene",
@@ -56,7 +61,8 @@
         ],
         "functional_groups": []
     },
-    "cyclic_indole_diterpenoid": {
+    {
+        "name": "cyclic_indole_diterpenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -70,7 +76,8 @@
             "OH"
         ]
     },
-    "cyclic_meroditerpenoid": {
+    {
+        "name": "cyclic_meroditerpenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -83,7 +90,8 @@
             "OH"
         ]
     },
-    "cyclic_merosesquiterpenoid": {
+    {
+        "name": "cyclic_merosesquiterpenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -96,7 +104,8 @@
             "OH"
         ]
     },
-    "C40_carotenoid": {
+    {
+        "name": "C40_carotenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "tetraterpene",
@@ -109,7 +118,8 @@
             "unknown"
         ]
     },
-    "diapophytoene": {
+    {
+        "name": "diapophytoene",
         "extended_name": "4,4'-diapophytoene",
         "single_compound": true,
         "biosynthetic_class": "triterpene",
@@ -118,7 +128,8 @@
         "initial_cyclisations": [],
         "functional_groups": []
     },
-    "diterpene": {
+    {
+        "name": "diterpene",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -131,7 +142,8 @@
             "unknown"
         ]
     },
-    "diterpene_C1-C11/C10-C14": {
+    {
+        "name": "diterpene_C1-C11/C10-C14",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -143,7 +155,8 @@
         ],
         "functional_groups": []
     },
-    "diterpene_C1-C6": {
+    {
+        "name": "diterpene_C1-C6",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -154,7 +167,8 @@
         ],
         "functional_groups": []
     },
-    "diterpene_C1-C7/C6-C10": {
+    {
+        "name": "diterpene_C1-C7/C6-C10",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -166,7 +180,8 @@
         ],
         "functional_groups": []
     },
-    "diterpene_C6-C11/C10-C15": {
+    {
+        "name": "diterpene_C6-C11/C10-C15",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -178,7 +193,8 @@
         ],
         "functional_groups": []
     },
-    "diterpene_C6-C11/C10-C15_PP": {
+    {
+        "name": "diterpene_C6-C11/C10-C15_PP",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -192,7 +208,8 @@
             "PP"
         ]
     },
-    "DMAPP": {
+    {
+        "name": "DMAPP",
         "extended_name": "dimethylallyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "hemiterpene",
@@ -203,7 +220,8 @@
             "PP"
         ]
     },
-    "epoxy_indole_diterpenoid": {
+    {
+        "name": "epoxy_indole_diterpenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -215,7 +233,8 @@
             "epoxy"
         ]
     },
-    "epoxy_meroditerpenoid": {
+    {
+        "name": "epoxy_meroditerpenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "diterpene",
@@ -226,7 +245,8 @@
             "epoxy"
         ]
     },
-    "epoxy_merosesquiterpenoid": {
+    {
+        "name": "epoxy_merosesquiterpenoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -237,7 +257,8 @@
             "epoxy"
         ]
     },
-    "epoxy_polypodane": {
+    {
+        "name": "epoxy_polypodane",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -250,7 +271,8 @@
             "epoxy"
         ]
     },
-    "FPP": {
+    {
+        "name": "FPP",
         "extended_name": "farnesyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "sesquiterpene",
@@ -261,7 +283,8 @@
             "PP"
         ]
     },
-    "geosmin": {
+    {
+        "name": "geosmin",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "sesquiterpene",
@@ -274,7 +297,8 @@
             "OH"
         ]
     },
-    "germacradienol": {
+    {
+        "name": "germacradienol",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "sesquiterpene",
@@ -287,7 +311,8 @@
             "OH"
         ]
     },
-    "GFPP": {
+    {
+        "name": "GFPP",
         "extended_name": "geranylfarnesyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "sesterterpene",
@@ -298,7 +323,8 @@
             "PP"
         ]
     },
-    "GGI": {
+    {
+        "name": "GGI",
         "extended_name": "geranylgeranyl indole",
         "single_compound": true,
         "biosynthetic_class": "diterpene",
@@ -309,7 +335,8 @@
             "indole"
         ]
     },
-    "GGPP": {
+    {
+        "name": "GGPP",
         "extended_name": "geranylgeranyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "diterpene",
@@ -320,7 +347,8 @@
             "PP"
         ]
     },
-    "GPP": {
+    {
+        "name": "GPP",
         "extended_name": "geranyl diphoshate",
         "single_compound": true,
         "biosynthetic_class": "monoterpene",
@@ -331,7 +359,8 @@
             "PP"
         ]
     },
-    "hopanoid": {
+    {
+        "name": "hopanoid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -344,7 +373,8 @@
             "unknown"
         ]
     },
-    "HPP": {
+    {
+        "name": "HPP",
         "extended_name": "hexaprenyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "triterpene",
@@ -355,7 +385,8 @@
             "PP"
         ]
     },
-    "hydroxysqualene": {
+    {
+        "name": "hydroxysqualene",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "triterpene",
@@ -366,7 +397,8 @@
             "OH"
         ]
     },
-    "IPP": {
+    {
+        "name": "IPP",
         "extended_name": "isopentenyl diphosphate",
         "single_compound": true,
         "biosynthetic_class": "hemiterpene",
@@ -377,7 +409,8 @@
             "PP"
         ]
     },
-    "monoterpene_C1-C10": {
+    {
+        "name": "monoterpene_C1-C10",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "monoterpene",
@@ -388,7 +421,8 @@
         ],
         "functional_groups": []
     },
-    "monoterpene_C1-C6": {
+    {
+        "name": "monoterpene_C1-C6",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "monoterpene",
@@ -399,7 +433,8 @@
         ],
         "functional_groups": []
     },
-    "onoceroid": {
+    {
+        "name": "onoceroid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -412,7 +447,8 @@
             "OH"
         ]
     },
-    "oxidosqualene": {
+    {
+        "name": "oxidosqualene",
         "extended_name": "2,3-oxidosqualene",
         "single_compound": true,
         "biosynthetic_class": "triterpene",
@@ -423,7 +459,8 @@
             "epoxy"
         ]
     },
-    "phytoene": {
+    {
+        "name": "phytoene",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "tetraterpene",
@@ -432,7 +469,8 @@
         "initial_cyclisations": [],
         "functional_groups": []
     },
-    "polypodane": {
+    {
+        "name": "polypodane",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -445,7 +483,8 @@
             "unknown"
         ]
     },
-    "PSPP": {
+    {
+        "name": "PSPP",
         "extended_name": "presqualene diphosphate",
         "single_compound": true,
         "biosynthetic_class": "triterpene",
@@ -456,7 +495,8 @@
             "PP"
         ]
     },
-    "sesquiterpene_C1-C10": {
+    {
+        "name": "sesquiterpene_C1-C10",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -467,7 +507,8 @@
         ],
         "functional_groups": []
     },
-    "sesquiterpene_C1-C11": {
+    {
+        "name": "sesquiterpene_C1-C11",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -478,7 +519,8 @@
         ],
         "functional_groups": []
     },
-    "sesquiterpene_C1-C6": {
+    {
+        "name": "sesquiterpene_C1-C6",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -489,7 +531,8 @@
         ],
         "functional_groups": []
     },
-    "sesquiterpene_C2-C7/C6-C11_OH": {
+    {
+        "name": "sesquiterpene_C2-C7/C6-C11_OH",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -503,7 +546,8 @@
             "OH"
         ]
     },
-    "sesquiterpene_C2-C7/C6-C11_PP": {
+    {
+        "name": "sesquiterpene_C2-C7/C6-C11_PP",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -517,7 +561,8 @@
             "PP"
         ]
     },
-    "sesquiterpene_C6-C11_OH": {
+    {
+        "name": "sesquiterpene_C6-C11_OH",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -530,7 +575,8 @@
             "OH"
         ]
     },
-    "sesquiterpene_C6-C11_PP": {
+    {
+        "name": "sesquiterpene_C6-C11_PP",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesquiterpene",
@@ -543,7 +589,8 @@
             "PP"
         ]
     },
-    "sesterterpene_C1-C11/C10-C14": {
+    {
+        "name": "sesterterpene_C1-C11/C10-C14",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesterterpene",
@@ -555,7 +602,8 @@
         ],
         "functional_groups": []
     },
-    "sesterterpene_C1-C15/C14-C18": {
+    {
+        "name": "sesterterpene_C1-C15/C14-C18",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesterterpene",
@@ -567,7 +615,8 @@
         ],
         "functional_groups": []
     },
-    "sesterterpene_C1-C7/C6-C10": {
+    {
+        "name": "sesterterpene_C1-C7/C6-C10",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "sesterterpene",
@@ -579,7 +628,8 @@
         ],
         "functional_groups": []
     },
-    "squalene": {
+    {
+        "name": "squalene",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "triterpene",
@@ -588,7 +638,8 @@
         "initial_cyclisations": [],
         "functional_groups": []
     },
-    "steroid": {
+    {
+        "name": "steroid",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -601,7 +652,8 @@
             "OH"
         ]
     },
-    "trichodiene": {
+    {
+        "name": "trichodiene",
         "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "sesquiterpene",
@@ -612,7 +664,8 @@
         ],
         "functional_groups": []
     },
-    "triterpene_C1-C11/C10-C14": {
+    {
+        "name": "triterpene_C1-C11/C10-C14",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -624,7 +677,8 @@
         ],
         "functional_groups": []
     },
-    "triterpene_C1-C14": {
+    {
+        "name": "triterpene_C1-C14",
         "extended_name": null,
         "single_compound": false,
         "biosynthetic_class": "triterpene",
@@ -635,4 +689,4 @@
         ],
         "functional_groups": []
     }
-}
+]

@@ -1,109 +1,102 @@
-{
-    "HAD_2": {
-        "description": "Haloacid dehalogenase-like hydrolase",
-        "cutoff": 15,
-        "main_profile": true,
+[
+    {
+        "name": "PT_noFPP_bact",
+        "description": "Prenyltransferase; Enzymes within the FPP_bact clade that are not FPPSs but GGPPSs or GFPPSs",
+        "length": 265,
+        "cutoff": 350,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
-                    "sesquiterpene_C2-C7/C6-C11_PP"
+                    "IPP",
+                    "DMAPP"
                 ],
                 "products": [
-                    "sesquiterpene_C2-C7/C6-C11_OH"
-                ]
-            },
-            {
-                "substrates": [
-                    "sesquiterpene_C6-C11_PP"
-                ],
-                "products": [
-                    "sesquiterpene_C6-C11_OH"
+                    "GGPP",
+                    "GFPP"
                 ]
             }
         ]
     },
-    "Lycopene_cycl": {
-        "description": "Lycopene cyclase",
-        "cutoff": 80,
-        "main_profile": true,
+    {
+        "name": "PT_FPP_bact",
+        "description": "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
+        "length": 265,
+        "cutoff": 250,
+        "subtypes": [
+            "PT_noFPP_bact"
+        ],
         "predictions": [
             {
                 "substrates": [
-                    "C40_carotenoid"
+                    "IPP",
+                    "DMAPP"
                 ],
                 "products": [
-                    "C40_carotenoid"
-                ]
-            }
-        ]
-    },
-    "Lycopene_cycl_fung": {
-        "description": "Lycopene cyclase domain; fungal",
-        "cutoff": 40,
-        "main_profile": true,
-        "predictions": [
-            {
-                "substrates": [
-                    "C40_carotenoid"
-                ],
-                "products": [
-                    "C40_carotenoid"
-                ]
-            }
-        ]
-    },
-    "phytoene_synt": {
-        "description": "Phytoene_synthase",
-        "cutoff": 20,
-        "main_profile": true,
-        "predictions": [
-            {
-                "substrates": [
                     "FPP"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "PT_FPP_fung",
+        "description": "Prenyltransferase; Farnesyl diphosphate synthase, fungal",
+        "length": 305,
+        "cutoff": 205,
+        "subtypes": [],
+        "predictions": [
+            {
+                "substrates": [
+                    "IPP",
+                    "DMAPP"
                 ],
                 "products": [
-                    "squalene",
-                    "diapophytoene",
-                    "PSPP"
+                    "FPP"
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "name": "PT_GFPP",
+        "description": "Prenyltransferase; Geranylfarnesyl diphosphate synthase",
+        "length": 308,
+        "cutoff": 370,
+        "subtypes": [],
+        "predictions": [
+            {
+                "substrates": [
+                    "IPP",
+                    "DMAPP"
+                ],
+                "products": [
+                    "GFPP"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "PT_GGI",
+        "description": "Prenyltransferase; 3-Geranylgeranylindole synthase",
+        "length": 279,
+        "cutoff": 254,
+        "subtypes": [],
+        "predictions": [
             {
                 "substrates": [
                     "GGPP"
                 ],
                 "products": [
-                    "phytoene"
-                ]
-            },
-            {
-                "substrates": [
-                    "PSPP"
-                ],
-                "products": [
-                    "hydroxysqualene"
+                    "GGI"
                 ]
             }
         ]
     },
-    "PT_diapophytoene": {
-        "description": "Prenyltransferase; Diapophytoene synthase",
-        "cutoff": 254,
-        "main_profile": false,
-        "predictions": [
-            {
-                "substrates": [
-                    "FPP"
-                ],
-                "products": [
-                    "diapophytoene"
-                ]
-            }
-        ]
-    },
-    "PT_FPP_bact": {
-        "description": "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
-        "cutoff": 250,
-        "main_profile": false,
+    {
+        "name": "PT_GGPP",
+        "description": "Prenyltransferase; Geranylgeranyl diphosphate synthase",
+        "length": 290,
+        "cutoff": 354,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -111,15 +104,17 @@
                     "DMAPP"
                 ],
                 "products": [
-                    "FPP"
+                    "GGPP"
                 ]
             }
         ]
     },
-    "PT_FPP_fung": {
-        "description": "Prenyltransferase; Farnesyl diphosphate synthase, fungal",
-        "cutoff": 205,
-        "main_profile": false,
+    {
+        "name": "PT_HPP",
+        "description": "Prenyltransferase; Hexaprenyl diphosphate synthase",
+        "length": 340,
+        "cutoff": 139,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -127,15 +122,24 @@
                     "DMAPP"
                 ],
                 "products": [
-                    "FPP"
+                    "HPP"
                 ]
             }
         ]
     },
-    "PT_FPPS_like": {
+    {
+        "name": "PT_FPPS_like",
         "description": "Prenyltransferase; Farnesyl diphosphate synthase like",
+        "length": 302,
         "cutoff": 56,
-        "main_profile": true,
+        "subtypes": [
+            "PT_FPP_bact",
+            "PT_FPP_fung",
+            "PT_GFPP",
+            "PT_GGI",
+            "PT_GGPP",
+            "PT_HPP"
+        ],
         "predictions": [
             {
                 "substrates": [
@@ -151,73 +155,29 @@
             }
         ]
     },
-    "PT_GFPP": {
-        "description": "Prenyltransferase; Geranylfarnesyl diphosphate synthase",
-        "cutoff": 370,
-        "main_profile": false,
-        "predictions": [
-            {
-                "substrates": [
-                    "IPP",
-                    "DMAPP"
-                ],
-                "products": [
-                    "GFPP"
-                ]
-            }
-        ]
-    },
-    "PT_GGI": {
-        "description": "Prenyltransferase; 3-Geranylgeranylindole synthase",
+    {
+        "name": "PT_diapophytoene",
+        "description": "Prenyltransferase; Diapophytoene synthase",
+        "length": 270,
         "cutoff": 254,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
-                    "GGPP"
+                    "FPP"
                 ],
                 "products": [
-                    "GGI"
+                    "diapophytoene"
                 ]
             }
         ]
     },
-    "PT_GGPP": {
-        "description": "Prenyltransferase; Geranylgeranyl diphosphate synthase",
-        "cutoff": 354,
-        "main_profile": false,
-        "predictions": [
-            {
-                "substrates": [
-                    "IPP",
-                    "DMAPP"
-                ],
-                "products": [
-                    "GGPP"
-                ]
-            }
-        ]
-    },
-    "PT_HPP": {
-        "description": "Prenyltransferase; Hexaprenyl diphosphate synthase",
-        "cutoff": 139,
-        "main_profile": false,
-        "predictions": [
-            {
-                "substrates": [
-                    "IPP",
-                    "DMAPP"
-                ],
-                "products": [
-                    "HPP"
-                ]
-            }
-        ]
-    },
-    "PT_hydroxysqualene": {
+    {
+        "name": "PT_hydroxysqualene",
         "description": "Prenyltransferase; Hydroxysqualene synthase",
+        "length": 283,
         "cutoff": 100,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -229,27 +189,51 @@
             }
         ]
     },
-    "PT_noFPP_bact": {
-        "description": "Prenyltransferase; Enzymes within the FPP_bact clade that are not FPPSs but GGPPSs or GFPPSs",
-        "cutoff": 350,
-        "main_profile": false,
+    {
+        "name": "PT_PSPP",
+        "description": "Prenyltransferase; Presqualene diphosphate synthase",
+        "length": 268,
+        "cutoff": 212,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
-                    "IPP",
-                    "DMAPP"
+                    "FPP"
                 ],
                 "products": [
-                    "GGPP",
-                    "GFPP"
+                    "PSPP"
                 ]
             }
         ]
     },
-    "PT_phytoene_like": {
+    {
+        "name": "PT_squalene",
+        "description": "Prenyltransferase; Squalene synthase",
+        "length": 399,
+        "cutoff": 252,
+        "subtypes": [],
+        "predictions": [
+            {
+                "substrates": [
+                    "FPP"
+                ],
+                "products": [
+                    "squalene"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "PT_phytoene_like",
         "description": "Prenyltransferase; Phytoene synthase like",
+        "length": 308,
         "cutoff": 20,
-        "main_profile": true,
+        "subtypes": [
+            "PT_diapophytoene",
+            "PT_hydroxysqualene",
+            "PT_PSPP",
+            "PT_squalene"
+        ],
         "predictions": [
             {
                 "substrates": [
@@ -279,46 +263,52 @@
             }
         ]
     },
-    "PT_PSPP": {
-        "description": "Prenyltransferase; Presqualene diphosphate synthase",
-        "cutoff": 212,
-        "main_profile": false,
+    {
+        "name": "phytoene_synt",
+        "description": "Phytoene_synthase",
+        "length": 269,
+        "cutoff": 20,
+        "subtypes": [
+            "PT_diapophytoene",
+            "PT_hydroxysqualene",
+            "PT_PSPP",
+            "PT_squalene"
+        ],
         "predictions": [
             {
                 "substrates": [
                     "FPP"
                 ],
                 "products": [
+                    "squalene",
+                    "diapophytoene",
                     "PSPP"
                 ]
-            }
-        ]
-    },
-    "PT_squalene": {
-        "description": "Prenyltransferase; Squalene synthase",
-        "cutoff": 252,
-        "main_profile": false,
-        "predictions": [
+            },
             {
                 "substrates": [
-                    "FPP"
+                    "GGPP"
                 ],
                 "products": [
-                    "squalene"
+                    "phytoene"
+                ]
+            },
+            {
+                "substrates": [
+                    "PSPP"
+                ],
+                "products": [
+                    "hydroxysqualene"
                 ]
             }
         ]
     },
-    "T1TS": {
-        "description": "Type 1 terpene synthase",
-        "cutoff": 15,
-        "main_profile": true,
-        "predictions": []
-    },
-    "T1TS_ARIS": {
+    {
+        "name": "T1TS_ARIS",
         "description": "Type 1 terpene synthase; Aristolochene synthase type",
+        "length": 316,
         "cutoff": 259,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -330,10 +320,12 @@
             }
         ]
     },
-    "T1TS_Bas_a": {
+    {
+        "name": "T1TS_Bas_a",
         "description": "Type 1 terpene synthase; Basidiomycete, group a",
+        "length": 319,
         "cutoff": 342,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -345,10 +337,12 @@
             }
         ]
     },
-    "T1TS_Bas_b": {
+    {
+        "name": "T1TS_Bas_b",
         "description": "Type 1 terpene synthase; Basidiomycete, group b",
+        "length": 314,
         "cutoff": 250,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -360,10 +354,12 @@
             }
         ]
     },
-    "T1TS_Bas_c": {
+    {
+        "name": "T1TS_Bas_c",
         "description": "Type 1 terpene synthase; Basidiomycete, group c",
+        "length": 315,
         "cutoff": 411,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -375,10 +371,12 @@
             }
         ]
     },
-    "T1TS_CEABS": {
+    {
+        "name": "T1TS_CEABS",
         "description": "Type 1 terpene synthase; Corvol ether A and B synthase type",
+        "length": 317,
         "cutoff": 295,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -390,10 +388,12 @@
             }
         ]
     },
-    "T1TS_geosC": {
+    {
+        "name": "T1TS_geosC",
         "description": "Type 1 terpene synthase; Geosmin synthase, C terminal domain",
+        "length": 380,
         "cutoff": 386,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -405,10 +405,12 @@
             }
         ]
     },
-    "T1TS_geosN": {
+    {
+        "name": "T1TS_geosN",
         "description": "Type 1 terpene synthase; Geosmin synthase, N terminal domain",
+        "length": 330,
         "cutoff": 337,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -420,10 +422,12 @@
             }
         ]
     },
-    "T1TS_GERAS": {
+    {
+        "name": "T1TS_GERAS",
         "description": "Type 1 terpene synthase; Germacrene A synthase type",
+        "length": 311,
         "cutoff": 275,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -443,10 +447,12 @@
             }
         ]
     },
-    "T1TS_HYPB": {
+    {
+        "name": "T1TS_HYPB",
         "description": "Type 1 terpene synthase; Hypoxylon sp. 1,8-cineole synthase type",
+        "length": 370,
         "cutoff": 166,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -466,10 +472,12 @@
             }
         ]
     },
-    "T1TS_IAFRS": {
+    {
+        "name": "T1TS_IAFRS",
         "description": "Type 1 terpene synthase; Isoafricanol synthase type",
+        "length": 338,
         "cutoff": 361,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -481,10 +489,12 @@
             }
         ]
     },
-    "T1TS_III-IV_a": {
+    {
+        "name": "T1TS_III-IV_a",
         "description": "Type 1 terpene synthase; Cyclising at double bonds III and IV, group a",
+        "length": 334,
         "cutoff": 200,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -505,10 +515,12 @@
             }
         ]
     },
-    "T1TS_III-IV_b": {
+    {
+        "name": "T1TS_III-IV_b",
         "description": "Type 1 terpene synthase; Cyclising at double bonds III and IV, group b",
+        "length": 322,
         "cutoff": 297,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -528,10 +540,12 @@
             }
         ]
     },
-    "T1TS_III-IV_c": {
+    {
+        "name": "T1TS_III-IV_c",
         "description": "Type 1 terpene synthase; Cyclising at double bonds III and IV, group c",
+        "length": 320,
         "cutoff": 225,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -559,10 +573,12 @@
             }
         ]
     },
-    "T1TS_IV-V_a": {
+    {
+        "name": "T1TS_IV-V_a",
         "description": "Type 1 terpene synthase; Cyclising at double bonds IV and V, group a",
+        "length": 333,
         "cutoff": 258,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -574,10 +590,12 @@
             }
         ]
     },
-    "T1TS_IV-V_b": {
+    {
+        "name": "T1TS_IV-V_b",
         "description": "Type 1 terpene synthase; Cyclising at double bonds IV and V, group b",
+        "length": 328,
         "cutoff": 235,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -597,10 +615,12 @@
             }
         ]
     },
-    "T1TS_IV-V_c": {
+    {
+        "name": "T1TS_IV-V_c",
         "description": "Type 1 terpene synthase; Cyclising at double bonds IV and V, group c",
+        "length": 326,
         "cutoff": 300,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -612,10 +632,12 @@
             }
         ]
     },
-    "T1TS_KS": {
+    {
+        "name": "T1TS_KS",
         "description": "Type 1 terpene synthase; Ent-kaurene synthase type",
+        "length": 392,
         "cutoff": 200,
-        "main_profile": true,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -627,10 +649,12 @@
             }
         ]
     },
-    "T1TS_LATES": {
+    {
+        "name": "T1TS_LATES",
         "description": "Type 1 terpene synthase; Labdatriene synthase type",
+        "length": 343,
         "cutoff": 150,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -642,10 +666,12 @@
             }
         ]
     },
-    "T1TS_MIBS": {
+    {
+        "name": "T1TS_MIBS",
         "description": "Type 1 terpene synthase; 2-Methylisoborneol synthase type",
+        "length": 431,
         "cutoff": 210,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -658,10 +684,12 @@
             }
         ]
     },
-    "T1TS_TRI": {
+    {
+        "name": "T1TS_TRI",
         "description": "Type 1 terpene synthase; Trichodiene synthase type",
+        "length": 305,
         "cutoff": 237,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -674,16 +702,41 @@
             }
         ]
     },
-    "T2TS": {
-        "description": "Type 2 terpene synthase",
-        "cutoff": 45,
-        "main_profile": true,
+    {
+        "name": "T1TS",
+        "description": "Type 1 terpene synthase",
+        "length": 429,
+        "cutoff": 15,
+        "subtypes": [
+            "T1TS_ARIS",
+            "T1TS_Bas_a",
+            "T1TS_Bas_b",
+            "T1TS_Bas_c",
+            "T1TS_CEABS",
+            "T1TS_geosC",
+            "T1TS_geosN",
+            "T1TS_GERAS",
+            "T1TS_HYPB",
+            "T1TS_IAFRS",
+            "T1TS_III-IV_a",
+            "T1TS_III-IV_b",
+            "T1TS_III-IV_c",
+            "T1TS_IV-V_a",
+            "T1TS_IV-V_b",
+            "T1TS_IV-V_c",
+            "T1TS_KS",
+            "T1TS_LATES",
+            "T1TS_MIBS",
+            "T1TS_TRI"
+        ],
         "predictions": []
     },
-    "T2TS_C15_a": {
+    {
+        "name": "T2TS_C15_a",
         "description": "Type 2 terpene synthase; Sesquiterpene synthase, group a",
+        "length": 483,
         "cutoff": 219,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -696,10 +749,12 @@
             }
         ]
     },
-    "T2TS_C15_b": {
+    {
+        "name": "T2TS_C15_b",
         "description": "Type 2 terpene synthase; Sesquiterpene synthase, group b",
+        "length": 513,
         "cutoff": 318,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -712,10 +767,12 @@
             }
         ]
     },
-    "T2TS_C20": {
+    {
+        "name": "T2TS_C20",
         "description": "Type 2 terpene synthase; Diterpene synthase",
+        "length": 529,
         "cutoff": 167,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -727,10 +784,12 @@
             }
         ]
     },
-    "T2TS_oxidosqualene": {
+    {
+        "name": "T2TS_oxidosqualene",
         "description": "Type 2 terpene synthase; Oxidosqualene substrate",
+        "length": 724,
         "cutoff": 539,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -742,10 +801,12 @@
             }
         ]
     },
-    "T2TS_squalene": {
+    {
+        "name": "T2TS_squalene",
         "description": "Type 2 terpene synthase; Squalene substrate",
+        "length": 659,
         "cutoff": 339,
-        "main_profile": false,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -758,10 +819,26 @@
             }
         ]
     },
-    "TS_Pyr4": {
+    {
+        "name": "T2TS",
+        "description": "Type 2 terpene synthase",
+        "length": 562,
+        "cutoff": 45,
+        "subtypes": [
+            "T2TS_C15_a",
+            "T2TS_C15_b",
+            "T2TS_C20",
+            "T2TS_oxidosqualene",
+            "T2TS_squalene"
+        ],
+        "predictions": []
+    },
+    {
+        "name": "TS_Pyr4",
         "description": "Pyr4 type terpene synthase",
+        "length": 243,
         "cutoff": 100,
-        "main_profile": true,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -797,10 +874,12 @@
             }
         ]
     },
-    "TS_UbiA": {
+    {
+        "name": "TS_UbiA",
         "description": "UbiA type terpene synthase",
+        "length": 302,
         "cutoff": 117,
-        "main_profile": true,
+        "subtypes": [],
         "predictions": [
             {
                 "substrates": [
@@ -828,5 +907,64 @@
                 ]
             }
         ]
+    },
+    {
+        "name": "HAD_2",
+        "description": "Haloacid dehalogenase-like hydrolase",
+        "length": 178,
+        "cutoff": 15,
+        "subtypes": [],
+        "predictions": [
+            {
+                "substrates": [
+                    "sesquiterpene_C2-C7/C6-C11_PP"
+                ],
+                "products": [
+                    "sesquiterpene_C2-C7/C6-C11_OH"
+                ]
+            },
+            {
+                "substrates": [
+                    "sesquiterpene_C6-C11_PP"
+                ],
+                "products": [
+                    "sesquiterpene_C6-C11_OH"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Lycopene_cycl",
+        "description": "Lycopene cyclase",
+        "length": 374,
+        "cutoff": 80,
+        "subtypes": [],
+        "predictions": [
+            {
+                "substrates": [
+                    "C40_carotenoid"
+                ],
+                "products": [
+                    "C40_carotenoid"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Lycopene_cycl_fung",
+        "description": "Lycopene cyclase domain; fungal",
+        "length": 89,
+        "cutoff": 40,
+        "subtypes": [],
+        "predictions": [
+            {
+                "substrates": [
+                    "C40_carotenoid"
+                ],
+                "products": [
+                    "C40_carotenoid"
+                ]
+            }
+        ]
     }
-}
+]
