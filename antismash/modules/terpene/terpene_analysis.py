@@ -107,16 +107,20 @@ def filter_by_score(hmm_results: Dict[str, List[HMMResult]],
     return results_by_id
 
 
-def remove_overlapping(results: List[HMMResult]) -> List[HMMResult]:
+def remove_overlapping(hmm_results: Dict[str, List[HMMResult]],
+                       hmm_properties: dict[str, TerpeneHMM]) -> List[HMMResult]:
     """ Filters overlapping hmm results, keeping the hit with the lowest evalue.
         If the evalues are too similar, both hits are kept.
+        Domains with an overlap of 20% or less aren't considered to be overlapping
     """
     non_overlapping = []
-    if results:
-        non_overlapping = [results[0]]
-        for result in results[1:]:
+    if hmm_results:
+        non_overlapping = [hmm_results[0]]
+        for result in hmm_results[1:]:
             previous = non_overlapping[-1]
-            if result.overlaps_with(previous):
+            maxoverlap = 0.20 * max(hmm_properties[result.hit_id].length,
+                                hmm_properties[previous.hit_id].length)
+            if result.query_start < (previous.query_end - maxoverlap):
                 # Replace the previous result if the current result scores significantly better
                 if math.log10(result.evalue) < 1.5 * math.log10(previous.evalue):
                     non_overlapping[-1] = result
@@ -135,7 +139,8 @@ def filter_overlaps(hmm_results: Dict[str, List[HMMResult]],
                    hmm_properties: dict[str, TerpeneHMM]) -> Dict[str, List[HMMResult]]:
     """ Removes overlaps within main profile hits and within subtype hits
     """
-    results_by_id: Dict[str, list[HMMResult]] = defaultdict(list)
+    filtered_results: Dict[str, list[HMMResult]] = defaultdict(list)
+    # Remove overlapping results within subtypes and within main types
     for cds_name, results in hmm_results.items():
         subtypes: list[HMMResult] = []
         main_types: list[HMMResult] = []
@@ -144,9 +149,36 @@ def filter_overlaps(hmm_results: Dict[str, List[HMMResult]],
                 subtypes.append(result)
             else:
                 main_types.append(result)
-        results_by_id[cds_name].extend(remove_overlapping(subtypes) +
-                                       remove_overlapping(main_types))
-    return results_by_id
+        filtered_results[cds_name].extend(remove_overlapping(subtypes, hmm_properties) +
+                                       remove_overlapping(main_types, hmm_properties))
+    # Results now contain subtypes first, then main types, so re-sort by location
+    for cds_name, results in filtered_results.items():
+        filtered_results[cds_name] = sorted(list(results), key=lambda result: result.query_start)
+    return filtered_results
+
+
+def merge_predictions(preds_per_hmm: list[tuple[ReactionPrediction, ...]]
+                      ) -> tuple[ReactionPrediction, ...]:
+    """ When one domain has multiple hmm hits,
+        merge their predictions by taking the intersect of their products.
+        Predictions are only merged if their substrate(s) is/are equal.
+        If none of the predictions share substrates, return an empty tuple.
+    """
+    final_preds = tuple()
+    if preds_per_hmm:
+        final_preds = [preds_per_hmm[0]]
+        if len(preds_per_hmm) > 1:
+            for preds in preds_per_hmm[1:]:
+                merged_preds = tuple(pred.merge(final_pred)
+                                for pred in preds for final_pred in final_preds[-1]
+                                if pred.has_equal_substrates(final_pred))
+                if merged_preds:
+                    final_preds[-1] = merged_preds
+                #If two hits have contrasting predictions, don't predict anything
+                else:
+                    return tuple()
+        final_preds = tuple(pred for preds in final_preds for pred in preds)
+    return final_preds
 
 
 def get_cds_predictions(hmm_results: Dict[str, List[HMMResult]],
@@ -167,8 +199,11 @@ def get_cds_predictions(hmm_results: Dict[str, List[HMMResult]],
         for result in hmm_results[1:]:
             overlapping = False
             for member in groups[-1]:
-                if result.overlaps_with(member):
+                maxoverlap = 0.20 * max(hmm_properties[result.hit_id].length,
+                                        hmm_properties[member.hit_id].length)
+                if result.query_start < (member.query_end - maxoverlap):
                     overlapping = True
+                    break
             if overlapping:
                 groups[-1].append(result)
             else:
@@ -180,8 +215,7 @@ def get_cds_predictions(hmm_results: Dict[str, List[HMMResult]],
             end_locations = []
             main_types = set()
             subtypes = set()
-            all_predictions = []
-            merged_predictions = set()
+            preds_per_hmm = []
             for hmm_result in group:
                 start_locations.append(hmm_result.query_start)
                 end_locations.append(hmm_result.query_end)
@@ -189,22 +223,14 @@ def get_cds_predictions(hmm_results: Dict[str, List[HMMResult]],
                 main_types.add(terpene_hmm.main_type)
                 if terpene_hmm.is_subtype():
                     subtypes.add(terpene_hmm.name)
-                for pred in terpene_hmm.predictions:
-                    print(pred)
-                    all_predictions.append(pred)
-            if all_predictions:
-                merged = all_predictions[0]
-                for other in all_predictions[1:]:
-                    if merged.substrates == other.substrates:
-                        merged = merged.merge(other)
-                    else:
-                        merged = other
-                    merged_predictions.add(merged)
+                if terpene_hmm.predictions:
+                    preds_per_hmm.append(terpene_hmm.predictions)
             assert len(main_types) == 1, "Overlapping hits cannot belong to different main types"
+            final_preds = merge_predictions(preds_per_hmm)
+
             domain_pred = DomainPrediction(type = main_types.pop(), subtypes = tuple(subtypes),
                                            start = min(start_locations), end = max(end_locations),
-                                           predictions = tuple(merged_predictions))
-            print(domain_pred)
+                                           predictions = final_preds)
             cds_predictions[cds_name].append(domain_pred)
     return cds_predictions
 
@@ -227,7 +253,5 @@ def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
     refined_results = refine_hmmscan_results(hmmscan_results, hmm_lengths, remove_incomplete_only = True)
     refined_results = filter_by_score(refined_results, hmm_properties)
     refined_results = filter_overlaps(refined_results, hmm_properties)
-    print(refined_results)
     cds_predictions = get_cds_predictions(refined_results, hmm_properties)
-
     return ProtoclusterPrediction(cds_predictions)

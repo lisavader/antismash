@@ -43,9 +43,15 @@ class ReactionPrediction():
     substrates: tuple[CompoundGroup, ...]
     products: tuple[CompoundGroup, ...]
 
+    def has_equal_substrates(self, other: "ReactionPrediction") -> bool:
+        """ Returns wether this instance and the provided instance
+            have the same substrates.
+        """
+        return self.substrates == other.substrates
+
     def merge(self, other: "ReactionPrediction") -> "ReactionPrediction":
         """ Creates a new ReactionPrediction instance that contains the
-            intersection of the substrates and products of this instance
+            intersections of the substrates and products of this instance
             and the provided instance.
         """
         return ReactionPrediction(tuple(set(self.substrates) & set(other.substrates)),
@@ -128,7 +134,7 @@ class DomainPrediction:
     subtypes: tuple[str, ...]
     start: int
     end: int
-    predictions: list[ReactionPrediction]
+    predictions: tuple[ReactionPrediction, ...]
 
     def __str__(self) -> str:
         return(f"DomainPrediction(type={self.type}, subtypes={self.subtypes}, start={self.start}, "
