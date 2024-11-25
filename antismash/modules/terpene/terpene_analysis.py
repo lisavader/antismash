@@ -14,12 +14,23 @@ from antismash.common.hmmscan_refinement import HMMResult, refine_hmmscan_result
 from antismash.common.secmet import Protocluster, CDSFeature
 from antismash.common.subprocessing.hmmscan import run_hmmscan, OutputType
 
-from .results import ProtoclusterPrediction, DomainPrediction, TerpeneHMM, CompoundGroup
+from .results import ProtoclusterPrediction, DomainPrediction, Reaction, TerpeneHMM, CompoundGroup
 
 
 _HMM_PROPERTIES_CACHE: dict[str, TerpeneHMM] = {}
 
-_TYPE_MAPPINGS = {"phytoene_synt": "PT_phytoene_like"}
+_TYPE_MAPPINGS = {"phytoene_synt": "PT_phytoene_like",
+                  "Lycopene_cycl_fung": "Lycopene_cycl"}
+
+_MAIN_TYPES_ORDER = ("PT_FPPS_like",
+                     "PT_phytoene_like",
+                     "T2TS",
+                     "HAD_2",
+                     "T1TS",
+                     "TS_UbiA",
+                     "TS_Pyr4",
+                     "Lycopene_cycl")
+
 
 def load_json(json_file):
     file_path = path.get_full_path(__file__, "data", json_file + ".json")
@@ -66,6 +77,7 @@ def get_hmm_properties() -> dict[str, TerpeneHMM]:
                 assert parent_name != hmm_name
                 parent_hmm = terpene_hmms[parent_name]
                 main_type = map_name(parent_name)
+            assert main_type in _MAIN_TYPES_ORDER, f"{main_type} is not an accepted main type"
             terpene_hmm.add_main_type(main_type)
 
         _HMM_PROPERTIES_CACHE.update(terpene_hmms)
@@ -157,28 +169,62 @@ def filter_overlaps(hmm_results: Dict[str, List[HMMResult]],
     return filtered_results
 
 
-def merge_predictions(preds_per_hmm: list[tuple[ReactionPrediction, ...]]
-                      ) -> tuple[ReactionPrediction, ...]:
+def merge_reactions(reactions_per_hmm: list[tuple[Reaction, ...]]
+                      ) -> tuple[Reaction, ...]:
     """ When one domain has multiple hmm hits,
-        merge their predictions by taking the intersect of their products.
-        Predictions are only merged if their substrate(s) is/are equal.
-        If none of the predictions share substrates, return an empty tuple.
+        merge the associated reactions by taking the intersect of their products.
+        Reactions are only merged if their substrate(s) is/are equal.
+        If none of the reactions share substrates, return an empty tuple.
     """
-    final_preds = tuple()
-    if preds_per_hmm:
-        final_preds = [preds_per_hmm[0]]
-        if len(preds_per_hmm) > 1:
-            for preds in preds_per_hmm[1:]:
-                merged_preds = tuple(pred.merge(final_pred)
-                                for pred in preds for final_pred in final_preds[-1]
-                                if pred.has_equal_substrates(final_pred))
-                if merged_preds:
-                    final_preds[-1] = merged_preds
+    final_reactions = tuple()
+    if reactions_per_hmm:
+        final_reactions = [reactions_per_hmm[0]]
+        if len(reactions_per_hmm) > 1:
+            for reactions in reactions_per_hmm[1:]:
+                merged_reactions = tuple(reaction.intersect(final_reaction)
+                                for reaction in reactions
+                                for final_reaction in final_reactions[-1]
+                                if reaction.has_equal_substrates(final_reaction))
+                if merged_reactions:
+                    final_reactions[-1] = merged_reactions
                 #If two hits have contrasting predictions, don't predict anything
                 else:
                     return tuple()
-        final_preds = tuple(pred for preds in final_preds for pred in preds)
-    return final_preds
+        final_reactions = tuple(reaction for reactions in final_reactions
+                                         for reaction in reactions)
+    return final_reactions
+
+
+def get_domain_prediction(hmm_results: Dict[str, List[HMMResult]],
+                          hmm_properties: dict[str, TerpeneHMM]) -> DomainPrediction:
+    """ Converts a list of HMMResults to a DomainPrediction
+
+        Arguments:
+            hmm_results: a list of HMMResults
+
+        Returns:
+            domain_prediction: a DomainPrediction
+    """
+    start_locations = []
+    end_locations = []
+    main_types = set()
+    subtypes = set()
+    reactions_per_hmm = []
+    for hmm_result in hmm_results:
+        start_locations.append(hmm_result.query_start)
+        end_locations.append(hmm_result.query_end)
+        terpene_hmm = hmm_properties[hmm_result.hit_id]
+        main_types.add(terpene_hmm.main_type)
+        if terpene_hmm.is_subtype():
+            subtypes.add(terpene_hmm.name)
+        if terpene_hmm.reactions:
+            reactions_per_hmm.append(terpene_hmm.reactions)
+    assert len(main_types) == 1, "Overlapping hits cannot belong to different main types"
+    final_reactions = merge_reactions(reactions_per_hmm)
+
+    return DomainPrediction(type = main_types.pop(), subtypes = tuple(subtypes),
+                                start = min(start_locations), end = max(end_locations),
+                                reactions = final_reactions)
 
 
 def get_cds_predictions(hmm_results: Dict[str, List[HMMResult]],
@@ -211,28 +257,16 @@ def get_cds_predictions(hmm_results: Dict[str, List[HMMResult]],
 
         # Add a domain prediction for each group
         for group in groups:
-            start_locations = []
-            end_locations = []
-            main_types = set()
-            subtypes = set()
-            preds_per_hmm = []
-            for hmm_result in group:
-                start_locations.append(hmm_result.query_start)
-                end_locations.append(hmm_result.query_end)
-                terpene_hmm = hmm_properties[hmm_result.hit_id]
-                main_types.add(terpene_hmm.main_type)
-                if terpene_hmm.is_subtype():
-                    subtypes.add(terpene_hmm.name)
-                if terpene_hmm.predictions:
-                    preds_per_hmm.append(terpene_hmm.predictions)
-            assert len(main_types) == 1, "Overlapping hits cannot belong to different main types"
-            final_preds = merge_predictions(preds_per_hmm)
-
-            domain_pred = DomainPrediction(type = main_types.pop(), subtypes = tuple(subtypes),
-                                           start = min(start_locations), end = max(end_locations),
-                                           predictions = final_preds)
-            cds_predictions[cds_name].append(domain_pred)
+            cds_predictions[cds_name].append(get_domain_prediction(group))
     return cds_predictions
+
+
+def get_cluster_prediction(cds_predictions):
+    all_domains = [domain for domains in cds_predictions.values() for domain in domains]
+    # List domains that don't have a subtype first
+    ordered_domains = sorted(all_domains, key=lambda domain: not domain.subtypes)
+    # Then order by the predefined main type order
+    ordered_domains = sorted(all_domains, key=lambda domain: _MAIN_TYPES_ORDER.index(domain.type))
 
 
 def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
@@ -245,7 +279,6 @@ def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
             a single ProtoclusterPrediction instance with analysis results
     """
     assert cluster.product == "terpene"
-
     hmm_properties = get_hmm_properties()
     hmm_lengths = {hmm_name: hmm_obj.length for hmm_name, hmm_obj in hmm_properties.items()}
 

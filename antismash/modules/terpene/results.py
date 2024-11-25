@@ -27,6 +27,17 @@ class CompoundGroup():
     initial_cyclisations: tuple[str]
     functional_groups: tuple[str]
 
+    def has_equal_skeleton(self, other: "CompoundGroup") -> bool:
+        """ Returns whether this instance and the provided instance
+            have the same chain length and initial cyclisations
+        """
+        return any([
+            self.name == other.name,
+            self.chain_length == other.chain_length \
+            and (self.initial_cyclisations == other.initial_cyclisations
+            or "unknown" in self.initial_cyclisations + other.initial_cyclisations)])
+
+
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Self:
         """ Reconstructs an instance from a JSON representation """
@@ -36,26 +47,28 @@ class CompoundGroup():
                    tuple(data["functional_groups"]))
 
 
-@dataclass(frozen = True)
-class ReactionPrediction():
-    """ Prediction of the substrates and products of a reaction.
+@dataclass
+class Reaction():
+    """ Contains the substrates and products of a chemical reaction.
     """
     substrates: tuple[CompoundGroup, ...]
     products: tuple[CompoundGroup, ...]
 
-    def has_equal_substrates(self, other: "ReactionPrediction") -> bool:
+
+    def has_equal_substrates(self, other: "Reaction") -> bool:
         """ Returns wether this instance and the provided instance
             have the same substrates.
         """
         return self.substrates == other.substrates
 
-    def merge(self, other: "ReactionPrediction") -> "ReactionPrediction":
-        """ Creates a new ReactionPrediction instance that contains the
+    def intersect(self, other: "Reaction") -> "Reaction":
+        """ Creates a new Reaction instance that contains the
             intersections of the substrates and products of this instance
             and the provided instance.
         """
-        return ReactionPrediction(tuple(set(self.substrates) & set(other.substrates)),
+        return Reaction(tuple(set(self.substrates) & set(other.substrates)),
                                   tuple(set(self.products) & set(other.products)))
+
 
     def __str__(self) -> str:
         return (f"substrates={[compound_group.name for compound_group in self.substrates]}, "
@@ -85,7 +98,7 @@ class TerpeneHMM:
     length: int
     cutoff: int
     subtypes: tuple["TerpeneHMM", ...]
-    predictions: tuple[ReactionPrediction, ...]
+    reactions: tuple[Reaction, ...]
     __parents: list[str] = field(default_factory = list)
     __main_type: str = ""
 
@@ -123,7 +136,7 @@ class TerpeneHMM:
         for subtype in subtypes:
             subtype.add_parent(hmm_json["name"])
         return cls(hmm_json["name"], hmm_json["description"], hmm_json["length"], hmm_json["cutoff"], subtypes,
-                   tuple(ReactionPrediction.from_json(pred, compound_groups) for pred in hmm_json["predictions"]))
+                   tuple(Reaction.from_json(pred, compound_groups) for pred in hmm_json["predictions"]))
 
 @dataclass
 class DomainPrediction:
@@ -134,7 +147,8 @@ class DomainPrediction:
     subtypes: tuple[str, ...]
     start: int
     end: int
-    predictions: tuple[ReactionPrediction, ...]
+    reactions: tuple[Reaction, ...]
+
 
     def __str__(self) -> str:
         return(f"DomainPrediction(type={self.type}, subtypes={self.subtypes}, start={self.start}, "
@@ -142,27 +156,19 @@ class DomainPrediction:
 
     def to_json(self) -> Tuple[str, Optional[str], int, int]:
         """ Returns a JSON-friendly representation of the DomainPrediction """
-        data = {key: getattr(self, key) for key in self.__slots__}
-        predictions = data.pop("predictions")
-        if predictions:
-            for pred in predictions:
-                data["predictions"].append({"substrates": [compound_group.name for compound_group in pred.substrates],
-                                            "products": [compound_group.name for compound_group in pred.products]})
-        return data
+
 
     @staticmethod
     def from_json(data: Dict[str, Any]) -> "DomainPrediction":
         """ Reconstructs a DomainPrediction from a JSON representation """
-        predictions = [ReactionPrediction.from_json(pred) for pred in data.get("predictions", [])]
+        predictions = [Reaction.from_json(pred) for pred in data.get("predictions", [])]
         return DomainPrediction(str(json[0]), str(json[1]), int(json[2]), int(json[3]))
 
 @dataclass
 class ProtoclusterPrediction:
     """ A prediction for a terpene protocluster
     """
-
-    def __init__(self, cds_predictions: Dict[str, List[DomainPrediction]]) -> None:
-        self.cds_predictions = cds_predictions
+    cds_predictions: dict[str, list[DomainPrediction]]
 
     def __str__(self) -> str:
         parts = [
@@ -171,7 +177,7 @@ class ProtoclusterPrediction:
 
         for cds, predictions in self.cds_predictions.items():
             parts.append(str(cds))
-            parts.append(" " + ("\n ".join(map(str, predictions))))
+            parts.append(("\n ".join(map(str, predictions))))
         return "\n".join(parts)
 
     def to_json(self) -> Dict[str, Any]:

@@ -5,7 +5,7 @@
         "length": 265,
         "cutoff": 350,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -26,7 +26,7 @@
         "subtypes": [
             "PT_noFPP_bact"
         ],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -44,7 +44,7 @@
         "length": 305,
         "cutoff": 205,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -62,7 +62,7 @@
         "length": 308,
         "cutoff": 370,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -80,7 +80,7 @@
         "length": 279,
         "cutoff": 254,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GGPP"
@@ -97,7 +97,7 @@
         "length": 290,
         "cutoff": 354,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -115,7 +115,7 @@
         "length": 340,
         "cutoff": 139,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -140,7 +140,7 @@
             "PT_GGPP",
             "PT_HPP"
         ],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "IPP",
@@ -161,7 +161,7 @@
         "length": 270,
         "cutoff": 254,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -178,7 +178,7 @@
         "length": 283,
         "cutoff": 100,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "PSPP"
@@ -195,7 +195,7 @@
         "length": 268,
         "cutoff": 212,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -212,7 +212,7 @@
         "length": 399,
         "cutoff": 252,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -234,7 +234,7 @@
             "PT_PSPP",
             "PT_squalene"
         ],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -274,7 +274,7 @@
             "PT_PSPP",
             "PT_squalene"
         ],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -309,7 +309,7 @@
         "length": 316,
         "cutoff": 259,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -326,7 +326,7 @@
         "length": 319,
         "cutoff": 342,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -343,7 +343,7 @@
         "length": 314,
         "cutoff": 250,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -360,7 +360,7 @@
         "length": 315,
         "cutoff": 411,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -377,7 +377,7 @@
         "length": 317,
         "cutoff": 295,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -394,7 +394,7 @@
         "length": 380,
         "cutoff": 386,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "germacradienol"
@@ -411,7 +411,7 @@
         "length": 330,
         "cutoff": 337,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -428,7 +428,7 @@
         "length": 311,
         "cutoff": 275,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GPP"
@@ -453,7 +453,7 @@
         "length": 370,
         "cutoff": 166,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GPP"
@@ -478,7 +478,7 @@
         "length": 338,
         "cutoff": 361,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -495,7 +495,7 @@
         "length": 334,
         "cutoff": 200,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GGPP"
@@ -521,7 +521,7 @@
         "length": 322,
         "cutoff": 297,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GGPP"
@@ -546,7 +546,7 @@
         "length": 320,
         "cutoff": 225,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GGPP"
@@ -579,7 +579,7 @@
         "length": 333,
         "cutoff": 258,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GFPP"
@@ -596,7 +596,7 @@
         "length": 328,
         "cutoff": 235,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GFPP"
@@ -621,7 +621,7 @@
         "length": 326,
         "cutoff": 300,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GFPP"
@@ -638,7 +638,7 @@
         "length": 392,
         "cutoff": 200,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "diterpene_C6-C11/C10-C15_PP"
@@ -655,7 +655,7 @@
         "length": 343,
         "cutoff": 150,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "diterpene_C6-C11/C10-C15_PP"
@@ -672,7 +672,7 @@
         "length": 431,
         "cutoff": 210,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "2-MeGPP"
@@ -690,7 +690,7 @@
         "length": 305,
         "cutoff": 237,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -729,7 +729,7 @@
             "T1TS_MIBS",
             "T1TS_TRI"
         ],
-        "predictions": []
+        "reactions": []
     },
     {
         "name": "T2TS_C15_a",
@@ -737,7 +737,7 @@
         "length": 483,
         "cutoff": 219,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -755,7 +755,7 @@
         "length": 513,
         "cutoff": 318,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -773,7 +773,7 @@
         "length": 529,
         "cutoff": 167,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "GGPP"
@@ -790,7 +790,7 @@
         "length": 724,
         "cutoff": 539,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "oxidosqualene"
@@ -807,7 +807,7 @@
         "length": 659,
         "cutoff": 339,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "squalene"
@@ -831,7 +831,7 @@
             "T2TS_oxidosqualene",
             "T2TS_squalene"
         ],
-        "predictions": []
+        "reactions": []
     },
     {
         "name": "TS_Pyr4",
@@ -839,7 +839,7 @@
         "length": 243,
         "cutoff": 100,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "epoxy_merosesquiterpenoid"
@@ -880,7 +880,7 @@
         "length": 302,
         "cutoff": 117,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "FPP"
@@ -914,7 +914,7 @@
         "length": 178,
         "cutoff": 15,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "sesquiterpene_C2-C7/C6-C11_PP"
@@ -939,7 +939,7 @@
         "length": 374,
         "cutoff": 80,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "C40_carotenoid"
@@ -956,7 +956,7 @@
         "length": 89,
         "cutoff": 40,
         "subtypes": [],
-        "predictions": [
+        "reactions": [
             {
                 "substrates": [
                     "C40_carotenoid"
