@@ -4,17 +4,24 @@
 """ Contains the results classes for the terpene module """
 
 import logging
-from typing import Any, Dict, List, Optional, Self, Union
-from typing import Tuple
-from dataclasses import dataclass, field
+from typing import Any, Optional, Self
 from collections import defaultdict
+from dataclasses import dataclass, field
+from functools import cached_property
 
-from antismash.common.json import JSONBase
 from antismash.common.module_results import ModuleResults
 from antismash.common.secmet import Record
 
+from .load_json import load_json
 
-@dataclass(frozen = True)
+class MissingCompoundError(ValueError):
+    pass
+
+class MissingHmmError(ValueError):
+    pass
+
+
+@dataclass(frozen = True, slots = True)
 class CompoundGroup():
     """ Biosynthetic and chemical properties for a group of compounds.
     """
@@ -37,23 +44,25 @@ class CompoundGroup():
             and (self.initial_cyclisations == other.initial_cyclisations
             or "unknown" in self.initial_cyclisations + other.initial_cyclisations)])
 
+    def to_json(self) -> dict[str, Any]:
+        """ Returns a JSON-friendly representation """
+        return {key: getattr(self, key) for key in self.__slots__}
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Self:
         """ Reconstructs an instance from a JSON representation """
-        return cls(data["name"], data["extended_name"], data["single_compound"],
-                   data["biosynthetic_class"], data["biosynthetic_subclass"],
-                   data["chain_length"], tuple(data["initial_cyclisations"]),
+        return cls(str(data["name"]), str(data["extended_name"]), bool(data["single_compound"]),
+                   str(data["biosynthetic_class"]), str(data["biosynthetic_subclass"]),
+                   int(data["chain_length"]), tuple(data["initial_cyclisations"]),
                    tuple(data["functional_groups"]))
 
 
-@dataclass
+@dataclass(frozen = True)
 class Reaction():
     """ Contains the substrates and products of a chemical reaction.
     """
     substrates: tuple[CompoundGroup, ...]
     products: tuple[CompoundGroup, ...]
-
 
     def has_equal_substrates(self, other: "Reaction") -> bool:
         """ Returns wether this instance and the provided instance
@@ -61,7 +70,7 @@ class Reaction():
         """
         return self.substrates == other.substrates
 
-    def intersect(self, other: "Reaction") -> "Reaction":
+    def merge(self, other: "Reaction") -> "Reaction":
         """ Creates a new Reaction instance that contains the
             intersections of the substrates and products of this instance
             and the provided instance.
@@ -69,10 +78,14 @@ class Reaction():
         return Reaction(tuple(set(self.substrates) & set(other.substrates)),
                                   tuple(set(self.products) & set(other.products)))
 
-
     def __str__(self) -> str:
         return (f"substrates={[compound_group.name for compound_group in self.substrates]}, "
                 f"products={[compound_group.name for compound_group in self.products]}")
+
+    def to_json(self) -> dict[str, Any]:
+        """ Returns a JSON-friendly representation  """
+        return {"substrates": [compound.name for compound in self.substrates],
+                "products": [compound.name for compound in self.products]}
 
     @classmethod
     def from_json(cls, data: dict[str, list[str]], compound_groups: dict[str, CompoundGroup]) -> Self:
@@ -81,12 +94,12 @@ class Reaction():
             substrates = data["substrates"]
             products = data["products"]
         except KeyError as key:
-            raise ValueError(f"{data}: Field {key} is missing")
+            raise MissingCompoundError(f"{data}: Field {key} is missing.")
         try:
             return cls(tuple(compound_groups[name] for name in substrates),
                        tuple(compound_groups[name] for name in products))
         except KeyError as key:
-            raise ValueError(f"Compound group {key} is not defined")
+            raise MissingCompoundError(f"Compound group {key} is not defined.")
 
 
 @dataclass
@@ -107,9 +120,9 @@ class TerpeneHMM:
         """ Returns the parents of the profile """
         return self.__parents
 
-    @property
+    @cached_property
     def main_type(self) -> str:
-        """ Returns the main type of the profile """
+        """ Returns the main type of the profile """ #lookup name in name_to_type dict
         return self.__main_type
 
     def is_subtype(self) -> bool:
@@ -121,48 +134,54 @@ class TerpeneHMM:
         self.__parents.append(parent)
 
     def add_main_type(self, main_type: str) -> None:
-        """ Adds the main type of the profile (if not defined yet) """
+        """ Adds the main type of the profile, if it doesn't exist """
         if not self.__main_type:
             self.__main_type = main_type
 
     @classmethod
-    def from_json(cls, hmm_json: Dict[str, Any], terpene_hmms: dict[str, "TerpeneHMM"],
+    def from_json(cls, hmm_json: dict[str, Any], terpene_hmms: dict[str, "TerpeneHMM"],
                   compound_groups: dict[str, CompoundGroup]) -> Self:
         """ Reconstructs an instance from a JSON representation """
         try:
             subtypes = tuple(terpene_hmms[name] for name in hmm_json["subtypes"])
         except KeyError as key:
-            raise ValueError(f"'{hmm_json['name']}': Subtype {key} not defined yet")
+            raise MissingHmmError(f"'{hmm_json['name']}': Subtype {key} not defined yet")
         for subtype in subtypes:
             subtype.add_parent(hmm_json["name"])
-        return cls(hmm_json["name"], hmm_json["description"], hmm_json["length"], hmm_json["cutoff"], subtypes,
-                   tuple(Reaction.from_json(pred, compound_groups) for pred in hmm_json["predictions"]))
+        return cls(str(hmm_json["name"]), str(hmm_json["description"]), int(hmm_json["length"]),
+                   int(hmm_json["cutoff"]), subtypes,
+                   tuple(Reaction.from_json(reaction, compound_groups)
+                         for reaction in hmm_json["reactions"]))
 
-@dataclass
+
+@dataclass(slots = True)
 class DomainPrediction:
     """ A prediction for a terpene biosynthetic domain
     """
-
     type: str
     subtypes: tuple[str, ...]
     start: int
     end: int
     reactions: tuple[Reaction, ...]
 
-
     def __str__(self) -> str:
         return(f"DomainPrediction(type={self.type}, subtypes={self.subtypes}, start={self.start}, "
-               f"end={self.end}, predictions={[str(prediction) for prediction in self.predictions]}")
+               f"end={self.end}, reactions={[str(reaction) for reaction in self.reactions]}")
 
-    def to_json(self) -> Tuple[str, Optional[str], int, int]:
-        """ Returns a JSON-friendly representation of the DomainPrediction """
-
+    def to_json(self) -> dict[str, Any]:
+        """ Returns a JSON-friendly representation """
+        data = {key: getattr(self, key) for key in self.__slots__}
+        reactions = data.pop("reactions")
+        if reactions:
+            data["reactions"] = [reaction.to_json() for reaction in reactions]
+        return data
 
     @staticmethod
-    def from_json(data: Dict[str, Any]) -> "DomainPrediction":
-        """ Reconstructs a DomainPrediction from a JSON representation """
-        predictions = [Reaction.from_json(pred) for pred in data.get("predictions", [])]
-        return DomainPrediction(str(json[0]), str(json[1]), int(json[2]), int(json[3]))
+    def from_json(data: dict[str, Any], compound_groups: dict[str, CompoundGroup]) -> "DomainPrediction":
+        """ Reconstructs an instance from a JSON representation """
+        reactions = tuple(Reaction.from_json(reaction, compound_groups) for reaction in data.get("reactions", []))
+        return DomainPrediction(str(data["type"]), tuple(data["subtypes"]), int(data["start"]),
+                                int(data["end"]), reactions)
 
 @dataclass
 class ProtoclusterPrediction:
@@ -174,27 +193,27 @@ class ProtoclusterPrediction:
         parts = [
             f"CDSs: {len(self.cds_predictions)}",
         ]
-
         for cds, predictions in self.cds_predictions.items():
             parts.append(str(cds))
             parts.append(("\n ".join(map(str, predictions))))
         return "\n".join(parts)
 
-    def to_json(self) -> Dict[str, Any]:
-        """ Converts a ProtoclusterPrediction into a JSON friendly format """
+    def to_json(self) -> dict[str, Any]:
+        """ Returns a JSON-friendly representation """
         cds_preds = {}
         for name, preds in self.cds_predictions.items():
             cds_preds[name] = [pred.to_json() for pred in preds]
-
-        return {"cds_preds": cds_preds,
-                }
+        return {"cds_preds": cds_preds}
 
     @staticmethod
-    def from_json(json: Dict[str, Any]) -> "ProtoclusterPrediction":
-        """ Rebuilds a ProtoclusterPrediction from JSON """
-        assert isinstance(json, dict), json
-        cds_predictions = {name: list(map(DomainPrediction.from_json, preds)) for name, preds in json["cds_preds"].items()}
-        return ProtoclusterPrediction(cds_predictions, int(json["start"]), int(json["end"]))
+    def from_json(json: dict[str, Any], compound_groups: dict[str, CompoundGroup]
+                  ) -> "ProtoclusterPrediction":
+        """ Reconstructs an instance from a JSON representation """
+        cds_predictions: dict[str, list[DomainPrediction]] = defaultdict(list)
+        for name, preds in json["cds_preds"].items():
+            for pred in preds:
+                cds_predictions[name].append(DomainPrediction.from_json(pred, compound_groups))
+        return ProtoclusterPrediction(cds_predictions)
 
 class TerpeneResults(ModuleResults):
     """ The combined results of the terpene module """
@@ -203,7 +222,7 @@ class TerpeneResults(ModuleResults):
 
     def __init__(self, record_id: str) -> None:
         super().__init__(record_id)
-        self.cluster_predictions: Dict[int, ProtoclusterPrediction] = {}
+        self.cluster_predictions: dict[int, ProtoclusterPrediction] = {}
 
     def __repr__(self) -> str:
         return f"TerpeneResults(clusters={list(self.cluster_predictions)})"
@@ -215,7 +234,8 @@ class TerpeneResults(ModuleResults):
             parts.append(str(prediction))
         return "".join(parts)
 
-    def to_json(self) -> Dict[str, Any]:
+    def to_json(self) -> dict[str, Any]:
+        """ Returns a JSON-friendly representation """
         clusters = {cluster_number: pred.to_json() for cluster_number, pred in self.cluster_predictions.items()}
         results = {"schema_version": self._schema_version,
                    "record_id": self.record_id,
@@ -223,13 +243,28 @@ class TerpeneResults(ModuleResults):
         return results
 
     @staticmethod
-    def from_json(json: Dict[str, Any], _record: Record) -> Optional["TerpeneResults"]:
+    def from_json(json: dict[str, Any], record: Record,
+                  ) -> Optional["TerpeneResults"]:
+        """ Reconstructs an instance from a JSON representation """
         assert "record_id" in json
         if json.get("schema_version") != TerpeneResults._schema_version:
             logging.warning("Mismatching schema version, dropping terpene results")
             return None
-        results = TerpeneResults(json["record_id"])
 
+        compound_groups: dict[str, CompoundGroup] = {}
+        compounds_json = load_json("compound_groups")
+        for group_data in compounds_json:
+            compound_group = CompoundGroup.from_json(group_data)
+            compound_groups[compound_group.name] = compound_group
+
+        results = TerpeneResults(json["record_id"])
+        try:
+            for cluster_id, prediction in json["protocluster_predictions"].items():
+                cluster_prediction = ProtoclusterPrediction.from_json(prediction, compound_groups)
+                results.cluster_predictions[int(cluster_id)] = cluster_prediction
+        except (MissingCompoundError, MissingHmmError):
+            logging.warning("Missing referenced terpene data, discarding results")
+            return None
         return results
 
     def add_to_record(self, record: Record) -> None:

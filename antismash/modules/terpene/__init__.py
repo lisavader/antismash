@@ -6,7 +6,7 @@
 
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from antismash.common import hmmer, path
 from antismash.common.secmet import Record
@@ -14,7 +14,7 @@ from antismash.config import ConfigType
 from antismash.config.args import ModuleArgs
 
 from .results import TerpeneResults
-from .terpene_analysis import get_hmm_properties, analyse_cluster
+from .terpene_analysis import _load_hmm_properties, analyse_cluster
 
 NAME = "terpene"
 SHORT_DESCRIPTION = "Terpene analysis"
@@ -31,12 +31,12 @@ def is_enabled(options: ConfigType) -> bool:
     return not options.minimal or options.terpene_enabled
 
 
-def check_options(_options: ConfigType) -> List[str]:
+def check_options(_options: ConfigType) -> list[str]:
     """ No options to check at the moment """
     return []
 
 
-def check_prereqs(options: ConfigType) -> List[str]:
+def check_prereqs(options: ConfigType) -> list[str]:
     """ Check the prerequisites.
             hmmscan: domain detection
             hmmpress: compressing the hmm files
@@ -58,7 +58,7 @@ def check_prereqs(options: ConfigType) -> List[str]:
     return failure_messages
 
 
-def prepare_data(logging_only: bool = False) -> List[str]:
+def prepare_data(logging_only: bool = False) -> list[str]:
     """ Ensures packaged data is fully prepared
 
         Arguments:
@@ -71,11 +71,11 @@ def prepare_data(logging_only: bool = False) -> List[str]:
 
     # Check if hmm_properties.json and compound_keys.json are well-formatted
     try:
-        get_hmm_properties()
+        _load_hmm_properties()
     except ValueError as err:
         if not logging_only:
             raise
-        failure_messages.append(err)
+        failure_messages.append(str(err))
 
     # the hmm files that need to be present in data
     hmm_names = ["main","PT_FPPS_like", "PT_phytoene_like", "T1TS", "T2TS"]
@@ -118,7 +118,7 @@ def prepare_data(logging_only: bool = False) -> List[str]:
     return failure_messages
 
 
-def regenerate_previous_results(previous: Dict[str, Any], record: Record,
+def regenerate_previous_results(previous: dict[str, Any], record: Record,
                                 _options: ConfigType) -> Optional[TerpeneResults]:
     """ Regenerate the previous results from JSON format.
 
@@ -153,7 +153,7 @@ def run_on_record(record: Record, results: TerpeneResults, options: ConfigType) 
 
     results = TerpeneResults(record.id)
 
-    terpene_clusters = [cluster for cluster in record.get_protoclusters() if cluster.product == 'terpene']
+    terpene_clusters = [cluster for cluster in record.get_protoclusters() if cluster.product_category == 'terpene']
     if not terpene_clusters:
         logging.debug("No terpene clusters to analyse")
         return results
