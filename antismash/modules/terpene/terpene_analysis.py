@@ -259,12 +259,19 @@ def get_cds_predictions(hmm_results_per_cds: dict[str, list[HMMResult]],
     return cds_predictions
 
 
-def get_cluster_prediction(cds_predictions: dict[str, list[DomainPrediction]]) -> None:
+def get_cluster_prediction(cds_predictions: dict[str, list[DomainPrediction]]) -> ProtoclusterPrediction:
+    cluster_pred = ProtoclusterPrediction(cds_predictions)
     all_domains = [domain for domains in cds_predictions.values() for domain in domains]
     # List domains that don't have a subtype first
     ordered_domains = sorted(all_domains, key=lambda domain: not domain.subtypes)
     # Then order by the predefined main type order
     ordered_domains = sorted(all_domains, key=lambda domain: _MAIN_TYPES_ORDER.index(domain.type))
+    # Find the products of the last domain
+    cluster_products = [reaction.products for reaction in ordered_domains[-1].reactions]
+    if cluster_products:
+        for product in cluster_products:
+            cluster_pred.add_product(product)
+    return cluster_pred
 
 
 def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
@@ -276,7 +283,7 @@ def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
         Returns:
             a single ProtoclusterPrediction instance with analysis results
     """
-    assert cluster.product == "terpene"
+    assert cluster.product_category == "terpene"
     hmm_properties = _load_hmm_properties()
     hmm_lengths = {hmm_name: hmm_obj.length for hmm_name, hmm_obj in hmm_properties.items()} #make class HMM_Property with this as atr
 
@@ -285,4 +292,4 @@ def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
     refined_results = filter_by_score(refined_results, hmm_properties)
     refined_results = filter_overlaps(refined_results, hmm_properties)
     cds_predictions = get_cds_predictions(refined_results, hmm_properties)
-    return ProtoclusterPrediction(cds_predictions)
+    return get_cluster_prediction(cds_predictions)

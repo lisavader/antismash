@@ -5,7 +5,6 @@
 
 import logging
 from typing import Any, Optional, Self
-from collections import defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property
 
@@ -26,10 +25,10 @@ class CompoundGroup():
     """ Biosynthetic and chemical properties for a group of compounds.
     """
     name: str
-    extended_name: str
+    extended_name: Optional[str]
     single_compound: bool
     biosynthetic_class: str
-    biosynthetic_subclass: str
+    biosynthetic_subclass: Optional[str]
     chain_length: int
     initial_cyclisations: tuple[str]
     functional_groups: tuple[str]
@@ -51,8 +50,8 @@ class CompoundGroup():
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Self:
         """ Reconstructs an instance from a JSON representation """
-        return cls(str(data["name"]), str(data["extended_name"]), bool(data["single_compound"]),
-                   str(data["biosynthetic_class"]), str(data["biosynthetic_subclass"]),
+        return cls(str(data["name"]), data["extended_name"], bool(data["single_compound"]),
+                   str(data["biosynthetic_class"]), data["biosynthetic_subclass"],
                    int(data["chain_length"]), tuple(data["initial_cyclisations"]),
                    tuple(data["functional_groups"]))
 
@@ -79,8 +78,8 @@ class Reaction():
                                   tuple(set(self.products) & set(other.products)))
 
     def __str__(self) -> str:
-        return (f"substrates={[compound_group.name for compound_group in self.substrates]}, "
-                f"products={[compound_group.name for compound_group in self.products]}")
+        return (f"substrates={[compound.name for compound in self.substrates]}, "
+                f"products={[compound.name for compound in self.products]}")
 
     def to_json(self) -> dict[str, Any]:
         """ Returns a JSON-friendly representation  """
@@ -116,7 +115,7 @@ class TerpeneHMM:
     __main_type: str = ""
 
     @property
-    def parents(self) -> list:
+    def parents(self) -> list[str]:
         """ Returns the parents of the profile """
         return self.__parents
 
@@ -188,6 +187,16 @@ class ProtoclusterPrediction:
     """ A prediction for a terpene protocluster
     """
     cds_predictions: dict[str, list[DomainPrediction]]
+    __products: list[CompoundGroup] = field(default_factory = list)
+
+    @property
+    def products(self) -> list[CompoundGroup]:
+        """ Returns the predicted products of the cluster """
+        return self.__products
+
+    def add_product(self, product: CompoundGroup) -> None:
+        """ Adds a product to products """
+        self.__products.append(product)
 
     def __str__(self) -> str:
         parts = [
@@ -209,11 +218,11 @@ class ProtoclusterPrediction:
     def from_json(json: dict[str, Any], compound_groups: dict[str, CompoundGroup]
                   ) -> "ProtoclusterPrediction":
         """ Reconstructs an instance from a JSON representation """
-        cds_predictions: dict[str, list[DomainPrediction]] = defaultdict(list)
+        cds_preds: dict[str, list[DomainPrediction]] = {}
         for name, preds in json["cds_preds"].items():
-            for pred in preds:
-                cds_predictions[name].append(DomainPrediction.from_json(pred, compound_groups))
-        return ProtoclusterPrediction(cds_predictions)
+            domains = [DomainPrediction.from_json(pred, compound_groups) for pred in preds]
+            cds_preds[name] = domains
+        return ProtoclusterPrediction(cds_preds)
 
 class TerpeneResults(ModuleResults):
     """ The combined results of the terpene module """
@@ -262,8 +271,8 @@ class TerpeneResults(ModuleResults):
             for cluster_id, prediction in json["protocluster_predictions"].items():
                 cluster_prediction = ProtoclusterPrediction.from_json(prediction, compound_groups)
                 results.cluster_predictions[int(cluster_id)] = cluster_prediction
-        except (MissingCompoundError, MissingHmmError):
-            logging.warning("Missing referenced terpene data, discarding results")
+        except (MissingCompoundError, MissingHmmError) as err:
+            logging.warning(f"Discarding results, missing referenced terpene data: {err}")
             return None
         return results
 
