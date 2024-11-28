@@ -15,6 +15,7 @@ from antismash.config.args import ModuleArgs
 
 from .results import TerpeneResults
 from .terpene_analysis import _load_hmm_properties, analyse_cluster
+from .html_output import generate_html, will_handle
 
 NAME = "terpene"
 SHORT_DESCRIPTION = "Terpene analysis"

@@ -1,0 +1,41 @@
+<div class="terpene-details">
+    <div class="heading">
+      <span>Detailed domain annotation</span> {{ help_tooltip(tooltip, "terpene-body") }}
+    </div>
+    {% for protocluster in protoclusters %}
+    <div class="protocluster-pred">
+      <span> Terpene cluster {{loop.index}} </span><br>
+      {% if protocluster.products %}
+        {% for product in protocluster.products %}
+        <div class="prediction">
+          <span> Prediction {{loop.index}}: {{ product.create_description() }} </span>
+          <div class="product-details">
+            <span> Product details: </span>
+            {{ collapser_start(target='none', level='all') }}
+              <span> Product length:</span> C{{ product.chain_length }}<br>
+              <span> Initial cyclic structure:</span> {{ product.create_cyclisations_description() }}<br>
+              <span> Functional groups:</span> {{ product.functional_groups | join(", ") }}<br>
+            {{ collapser_end() }}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <span> No predictions </span>
+      {% endif %}
+      {% if protocluster.cds_predictions %}
+        <div class="domain-details">
+          <span> Domains: </span>
+          {{ collapser_start(target='none', level='none') }}
+          {% for cds, domain_preds in protocluster.cds_predictions.items() %}
+            {% for pred in domain_preds %}
+            {{ format_domain_description(cds, pred) }}<br>
+            <span> Subtype:</span> {{ format_subtype(pred) }}<br>
+            <span> Reactions:</span> {{ format_reactions(pred) }}
+            {% endfor %}
+          {% endfor %}
+          {{ collapser_end() }}
+        </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+</div>

@@ -267,9 +267,8 @@ def get_cluster_prediction(cds_predictions: dict[str, list[DomainPrediction]]) -
     # Then order by the predefined main type order
     ordered_domains = sorted(all_domains, key=lambda domain: _MAIN_TYPES_ORDER.index(domain.type))
     # Find the products of the last domain
-    cluster_products = [reaction.products for reaction in ordered_domains[-1].reactions]
-    if cluster_products:
-        for product in cluster_products:
+    for reaction in ordered_domains[-1].reactions:
+        for product in reaction.products:
             cluster_pred.add_product(product)
     return cluster_pred
 

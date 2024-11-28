@@ -43,6 +43,29 @@ class CompoundGroup():
             and (self.initial_cyclisations == other.initial_cyclisations
             or "unknown" in self.initial_cyclisations + other.initial_cyclisations)])
 
+    def create_description(self) -> str:
+        """ Returns a description for the compound group
+        """
+        description = [self.biosynthetic_class.capitalize()]
+        if self.biosynthetic_subclass:
+            description.append(f", {self.biosynthetic_subclass}")
+        if self.single_compound:
+            name = self.name.capitalize()
+            if self.extended_name:
+                name = self.extended_name.capitalize()
+            description.append(f", Compound name = {name}")
+        return ''.join(description)
+
+    def create_cyclisations_description(self) -> str:
+        """ Returns a description of the cyclisations for this
+            compound group
+        """
+        if not self.initial_cyclisations:
+            return "acyclic"
+        elif "unknown" in self.initial_cyclisations:
+            return "unknown"
+        return " + ".join(self.initial_cyclisations)
+
     def to_json(self) -> dict[str, Any]:
         """ Returns a JSON-friendly representation """
         return {key: getattr(self, key) for key in self.__slots__}
@@ -69,7 +92,7 @@ class Reaction():
         """
         return self.substrates == other.substrates
 
-    def merge(self, other: "Reaction") -> "Reaction":
+    def merge(self, other: "Reaction") -> "Reaction": #change name
         """ Creates a new Reaction instance that contains the
             intersections of the substrates and products of this instance
             and the provided instance.
@@ -90,13 +113,8 @@ class Reaction():
     def from_json(cls, data: dict[str, list[str]], compound_groups: dict[str, CompoundGroup]) -> Self:
         """ Reconstructs an instance from a JSON representation """
         try:
-            substrates = data["substrates"]
-            products = data["products"]
-        except KeyError as key:
-            raise MissingCompoundError(f"{data}: Field {key} is missing.")
-        try:
-            return cls(tuple(compound_groups[name] for name in substrates),
-                       tuple(compound_groups[name] for name in products))
+            return cls(tuple(compound_groups[name] for name in data["substrates"]),
+                       tuple(compound_groups[name] for name in data["products"]))
         except KeyError as key:
             raise MissingCompoundError(f"Compound group {key} is not defined.")
 
@@ -175,12 +193,12 @@ class DomainPrediction:
             data["reactions"] = [reaction.to_json() for reaction in reactions]
         return data
 
-    @staticmethod
-    def from_json(data: dict[str, Any], compound_groups: dict[str, CompoundGroup]) -> "DomainPrediction":
+    @classmethod
+    def from_json(cls, data: dict[str, Any], compound_groups: dict[str, CompoundGroup]) -> "DomainPrediction":
         """ Reconstructs an instance from a JSON representation """
         reactions = tuple(Reaction.from_json(reaction, compound_groups) for reaction in data.get("reactions", []))
-        return DomainPrediction(str(data["type"]), tuple(data["subtypes"]), int(data["start"]),
-                                int(data["end"]), reactions)
+        return cls(str(data["type"]), tuple(data["subtypes"]), int(data["start"]),
+                   int(data["end"]), reactions)
 
 @dataclass
 class ProtoclusterPrediction:
@@ -212,17 +230,22 @@ class ProtoclusterPrediction:
         cds_preds = {}
         for name, preds in self.cds_predictions.items():
             cds_preds[name] = [pred.to_json() for pred in preds]
-        return {"cds_preds": cds_preds}
+        return {"cds_preds": cds_preds,
+                "products": [compound.name for compound in self.products]}
 
-    @staticmethod
-    def from_json(json: dict[str, Any], compound_groups: dict[str, CompoundGroup]
+    @classmethod
+    def from_json(cls, json: dict[str, Any], compound_groups: dict[str, CompoundGroup]
                   ) -> "ProtoclusterPrediction":
         """ Reconstructs an instance from a JSON representation """
         cds_preds: dict[str, list[DomainPrediction]] = {}
         for name, preds in json["cds_preds"].items():
             domains = [DomainPrediction.from_json(pred, compound_groups) for pred in preds]
             cds_preds[name] = domains
-        return ProtoclusterPrediction(cds_preds)
+        try:
+            return cls(cds_preds, [compound_groups[compound] for compound in json["products"]])
+        except KeyError as key:
+            raise MissingCompoundError(f"Compound group {key} is not defined.")
+
 
 class TerpeneResults(ModuleResults):
     """ The combined results of the terpene module """
