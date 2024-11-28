@@ -43,20 +43,23 @@ class CompoundGroup():
             and (self.initial_cyclisations == other.initial_cyclisations
             or "unknown" in self.initial_cyclisations + other.initial_cyclisations)])
 
-    def create_description(self) -> str:
-        """ Returns a description for the compound group
+    def get_compound_name(self) -> str:
+        """ Returns the name of the compound, if the compound group
+            represents a single compound, otherwise returns "unknown"
         """
-        description = [self.biosynthetic_class.capitalize()]
-        if self.biosynthetic_subclass:
-            description.append(f", {self.biosynthetic_subclass}")
-        if self.single_compound:
-            name = self.name.capitalize()
-            if self.extended_name:
-                name = self.extended_name.capitalize()
-            description.append(f", Compound name = {name}")
-        return ''.join(description)
+        if not self.single_compound:
+            return "unknown"
+        return self.name
 
-    def create_cyclisations_description(self) -> str:
+    def get_subclass(self) -> str:
+        """ Returns the biosynthetic subclass, if it exists,
+            otherwise returns "none"
+        """
+        if not self.biosynthetic_subclass:
+            return "none"
+        return self.biosynthetic_subclass
+
+    def get_cyclisations_description(self) -> str:
         """ Returns a description of the cyclisations for this
             compound group
         """

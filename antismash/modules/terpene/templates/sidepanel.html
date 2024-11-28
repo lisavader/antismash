@@ -1,5 +1,18 @@
 <div class="terpene-sidepanel">
-    <div class="heading">
-      <span>Glossary</span> {{help_tooltip(tooltip, "terpene-side")}}
-    </div>
+  <div class="heading">
+    <span>Glossary</span> {{help_tooltip(tooltip, "terpene-side")}}
+  </div>
+  <div class="glossary prediction-text">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Abbreviation</th>
+          <th>Full compound name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ format_glossary_rows(protoclusters) }}
+      </tbody>
+    </table>
+  </div>
 </div>

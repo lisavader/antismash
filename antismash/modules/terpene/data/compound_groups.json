@@ -120,7 +120,7 @@
     },
     {
         "name": "diapophytoene",
-        "extended_name": "4,4'-diapophytoene",
+        "extended_name": null,
         "single_compound": true,
         "biosynthetic_class": "triterpene",
         "biosynthetic_subclass": "C30 carotenoid",
