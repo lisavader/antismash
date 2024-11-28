@@ -2,6 +2,7 @@
     {
         "name": "PT_noFPP_bact",
         "description": "Prenyltransferase; Enzymes within the FPP_bact clade that are not FPPSs but GGPPSs or GFPPSs",
+        "type": "PT_FPPS_like",
         "length": 265,
         "cutoff": 350,
         "subtypes": [],
@@ -21,6 +22,7 @@
     {
         "name": "PT_FPP_bact",
         "description": "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
+        "type": "PT_FPPS_like",
         "length": 265,
         "cutoff": 250,
         "subtypes": [
@@ -41,6 +43,7 @@
     {
         "name": "PT_FPP_fung",
         "description": "Prenyltransferase; Farnesyl diphosphate synthase, fungal",
+        "type": "PT_FPPS_like",
         "length": 305,
         "cutoff": 205,
         "subtypes": [],
@@ -59,6 +62,7 @@
     {
         "name": "PT_GFPP",
         "description": "Prenyltransferase; Geranylfarnesyl diphosphate synthase",
+        "type": "PT_FPPS_like",
         "length": 308,
         "cutoff": 370,
         "subtypes": [],
@@ -77,6 +81,7 @@
     {
         "name": "PT_GGI",
         "description": "Prenyltransferase; 3-Geranylgeranylindole synthase",
+        "type": "PT_FPPS_like",
         "length": 279,
         "cutoff": 254,
         "subtypes": [],
@@ -94,6 +99,7 @@
     {
         "name": "PT_GGPP",
         "description": "Prenyltransferase; Geranylgeranyl diphosphate synthase",
+        "type": "PT_FPPS_like",
         "length": 290,
         "cutoff": 354,
         "subtypes": [],
@@ -112,6 +118,7 @@
     {
         "name": "PT_HPP",
         "description": "Prenyltransferase; Hexaprenyl diphosphate synthase",
+        "type": "PT_FPPS_like",
         "length": 340,
         "cutoff": 139,
         "subtypes": [],
@@ -130,6 +137,7 @@
     {
         "name": "PT_FPPS_like",
         "description": "Prenyltransferase; Farnesyl diphosphate synthase like",
+        "type": "PT_FPPS_like",
         "length": 302,
         "cutoff": 56,
         "subtypes": [
@@ -158,6 +166,7 @@
     {
         "name": "PT_diapophytoene",
         "description": "Prenyltransferase; Diapophytoene synthase",
+        "type": "PT_phytoene_like",
         "length": 270,
         "cutoff": 254,
         "subtypes": [],
@@ -175,6 +184,7 @@
     {
         "name": "PT_hydroxysqualene",
         "description": "Prenyltransferase; Hydroxysqualene synthase",
+        "type": "PT_phytoene_like",
         "length": 283,
         "cutoff": 100,
         "subtypes": [],
@@ -192,6 +202,7 @@
     {
         "name": "PT_PSPP",
         "description": "Prenyltransferase; Presqualene diphosphate synthase",
+        "type": "PT_phytoene_like",
         "length": 268,
         "cutoff": 212,
         "subtypes": [],
@@ -209,6 +220,7 @@
     {
         "name": "PT_squalene",
         "description": "Prenyltransferase; Squalene synthase",
+        "type": "PT_phytoene_like",
         "length": 399,
         "cutoff": 252,
         "subtypes": [],
@@ -226,6 +238,7 @@
     {
         "name": "PT_phytoene_like",
         "description": "Prenyltransferase; Phytoene synthase like",
+        "type": "PT_phytoene_like",
         "length": 308,
         "cutoff": 20,
         "subtypes": [
@@ -266,6 +279,7 @@
     {
         "name": "phytoene_synt",
         "description": "Phytoene_synthase",
+        "type": "PT_phytoene_like",
         "length": 269,
         "cutoff": 20,
         "subtypes": [
@@ -306,6 +320,7 @@
     {
         "name": "T1TS_ARIS",
         "description": "Type 1 terpene synthase; Aristolochene synthase type",
+        "type": "T1TS",
         "length": 316,
         "cutoff": 259,
         "subtypes": [],
@@ -323,6 +338,7 @@
     {
         "name": "T1TS_Bas_a",
         "description": "Type 1 terpene synthase; Basidiomycete, group a",
+        "type": "T1TS",
         "length": 319,
         "cutoff": 342,
         "subtypes": [],
@@ -340,6 +356,7 @@
     {
         "name": "T1TS_Bas_b",
         "description": "Type 1 terpene synthase; Basidiomycete, group b",
+        "type": "T1TS",
         "length": 314,
         "cutoff": 250,
         "subtypes": [],
@@ -357,6 +374,7 @@
     {
         "name": "T1TS_Bas_c",
         "description": "Type 1 terpene synthase; Basidiomycete, group c",
+        "type": "T1TS",
         "length": 315,
         "cutoff": 411,
         "subtypes": [],
@@ -374,6 +392,7 @@
     {
         "name": "T1TS_CEABS",
         "description": "Type 1 terpene synthase; Corvol ether A and B synthase type",
+        "type": "T1TS",
         "length": 317,
         "cutoff": 295,
         "subtypes": [],
@@ -391,6 +410,7 @@
     {
         "name": "T1TS_geosC",
         "description": "Type 1 terpene synthase; Geosmin synthase, C terminal domain",
+        "type": "T1TS",
         "length": 380,
         "cutoff": 386,
         "subtypes": [],
@@ -408,6 +428,7 @@
     {
         "name": "T1TS_geosN",
         "description": "Type 1 terpene synthase; Geosmin synthase, N terminal domain",
+        "type": "T1TS",
         "length": 330,
         "cutoff": 337,
         "subtypes": [],
@@ -425,6 +446,7 @@
     {
         "name": "T1TS_GERAS",
         "description": "Type 1 terpene synthase; Germacrene A synthase type",
+        "type": "T1TS",
         "length": 311,
         "cutoff": 275,
         "subtypes": [],
@@ -450,6 +472,7 @@
     {
         "name": "T1TS_HYPB",
         "description": "Type 1 terpene synthase; Hypoxylon sp. 1,8-cineole synthase type",
+        "type": "T1TS",
         "length": 370,
         "cutoff": 166,
         "subtypes": [],
@@ -475,6 +498,7 @@
     {
         "name": "T1TS_IAFRS",
         "description": "Type 1 terpene synthase; Isoafricanol synthase type",
+        "type": "T1TS",
         "length": 338,
         "cutoff": 361,
         "subtypes": [],
@@ -492,6 +516,7 @@
     {
         "name": "T1TS_III-IV_a",
         "description": "Type 1 terpene synthase; Cyclising at double bonds III and IV, group a",
+        "type": "T1TS",
         "length": 334,
         "cutoff": 200,
         "subtypes": [],
@@ -518,6 +543,7 @@
     {
         "name": "T1TS_III-IV_b",
         "description": "Type 1 terpene synthase; Cyclising at double bonds III and IV, group b",
+        "type": "T1TS",
         "length": 322,
         "cutoff": 297,
         "subtypes": [],
@@ -543,6 +569,7 @@
     {
         "name": "T1TS_III-IV_c",
         "description": "Type 1 terpene synthase; Cyclising at double bonds III and IV, group c",
+        "type": "T1TS",
         "length": 320,
         "cutoff": 225,
         "subtypes": [],
@@ -576,6 +603,7 @@
     {
         "name": "T1TS_IV-V_a",
         "description": "Type 1 terpene synthase; Cyclising at double bonds IV and V, group a",
+        "type": "T1TS",
         "length": 333,
         "cutoff": 258,
         "subtypes": [],
@@ -593,6 +621,7 @@
     {
         "name": "T1TS_IV-V_b",
         "description": "Type 1 terpene synthase; Cyclising at double bonds IV and V, group b",
+        "type": "T1TS",
         "length": 328,
         "cutoff": 235,
         "subtypes": [],
@@ -618,6 +647,7 @@
     {
         "name": "T1TS_IV-V_c",
         "description": "Type 1 terpene synthase; Cyclising at double bonds IV and V, group c",
+        "type": "T1TS",
         "length": 326,
         "cutoff": 300,
         "subtypes": [],
@@ -635,6 +665,7 @@
     {
         "name": "T1TS_KS",
         "description": "Type 1 terpene synthase; Ent-kaurene synthase type",
+        "type": "T1TS",
         "length": 392,
         "cutoff": 200,
         "subtypes": [],
@@ -652,6 +683,7 @@
     {
         "name": "T1TS_LATES",
         "description": "Type 1 terpene synthase; Labdatriene synthase type",
+        "type": "T1TS",
         "length": 343,
         "cutoff": 150,
         "subtypes": [],
@@ -669,6 +701,7 @@
     {
         "name": "T1TS_MIBS",
         "description": "Type 1 terpene synthase; 2-Methylisoborneol synthase type",
+        "type": "T1TS",
         "length": 431,
         "cutoff": 210,
         "subtypes": [],
@@ -687,6 +720,7 @@
     {
         "name": "T1TS_TRI",
         "description": "Type 1 terpene synthase; Trichodiene synthase type",
+        "type": "T1TS",
         "length": 305,
         "cutoff": 237,
         "subtypes": [],
@@ -705,6 +739,7 @@
     {
         "name": "T1TS",
         "description": "Type 1 terpene synthase",
+        "type": "T1TS",
         "length": 429,
         "cutoff": 15,
         "subtypes": [
@@ -734,6 +769,7 @@
     {
         "name": "T2TS_C15_a",
         "description": "Type 2 terpene synthase; Sesquiterpene synthase, group a",
+        "type": "T2TS",
         "length": 483,
         "cutoff": 219,
         "subtypes": [],
@@ -752,6 +788,7 @@
     {
         "name": "T2TS_C15_b",
         "description": "Type 2 terpene synthase; Sesquiterpene synthase, group b",
+        "type": "T2TS",
         "length": 513,
         "cutoff": 318,
         "subtypes": [],
@@ -770,6 +807,7 @@
     {
         "name": "T2TS_C20",
         "description": "Type 2 terpene synthase; Diterpene synthase",
+        "type": "T2TS",
         "length": 529,
         "cutoff": 167,
         "subtypes": [],
@@ -787,6 +825,7 @@
     {
         "name": "T2TS_oxidosqualene",
         "description": "Type 2 terpene synthase; Oxidosqualene substrate",
+        "type": "T2TS",
         "length": 724,
         "cutoff": 539,
         "subtypes": [],
@@ -804,6 +843,7 @@
     {
         "name": "T2TS_squalene",
         "description": "Type 2 terpene synthase; Squalene substrate",
+        "type": "T2TS",
         "length": 659,
         "cutoff": 339,
         "subtypes": [],
@@ -822,6 +862,7 @@
     {
         "name": "T2TS",
         "description": "Type 2 terpene synthase",
+        "type": "T2TS",
         "length": 562,
         "cutoff": 45,
         "subtypes": [
@@ -836,6 +877,7 @@
     {
         "name": "TS_Pyr4",
         "description": "Pyr4 type terpene synthase",
+        "type": "TS_Pyr4",
         "length": 243,
         "cutoff": 100,
         "subtypes": [],
@@ -877,6 +919,7 @@
     {
         "name": "TS_UbiA",
         "description": "UbiA type terpene synthase",
+        "type": "TS_UbiA",
         "length": 302,
         "cutoff": 117,
         "subtypes": [],
@@ -911,6 +954,7 @@
     {
         "name": "HAD_2",
         "description": "Haloacid dehalogenase-like hydrolase",
+        "type": "HAD_2",
         "length": 178,
         "cutoff": 15,
         "subtypes": [],
@@ -936,6 +980,7 @@
     {
         "name": "Lycopene_cycl",
         "description": "Lycopene cyclase",
+        "type": "Lycopene_cycl",
         "length": 374,
         "cutoff": 80,
         "subtypes": [],
@@ -953,6 +998,7 @@
     {
         "name": "Lycopene_cycl_fung",
         "description": "Lycopene cyclase domain; fungal",
+        "type": "Lycopene_cycl",
         "length": 89,
         "cutoff": 40,
         "subtypes": [],

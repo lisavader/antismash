@@ -29,7 +29,7 @@ def build_dummy_compound_groups():
             name = "GFPP",
             extended_name = "geranylfarnesyl diphosphate",
             single_compound = True,
-            biosynthetic_class = "sesterterpene",
+            biosynthetic_class = "sesterterpene precursor",
             biosynthetic_subclass = None,
             chain_length = 25,
             initial_cyclisations = tuple(),
@@ -65,6 +65,7 @@ def build_dummy_terpene_hmms():
     return {"PT_FPP_bact": TerpeneHMM(
             name = "PT_FPP_bact",
             description = "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
+            type = "PT_FPPS_like",
             length = 265,
             cutoff = 250,
             subtypes = tuple(),

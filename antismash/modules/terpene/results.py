@@ -128,6 +128,7 @@ class TerpeneHMM:
     """
     name: str
     description: str
+    type: str
     length: int
     cutoff: int
     subtypes: tuple["TerpeneHMM", ...]
@@ -168,8 +169,8 @@ class TerpeneHMM:
             raise MissingHmmError(f"'{hmm_json['name']}': Subtype {key} not defined yet")
         for subtype in subtypes:
             subtype.add_parent(hmm_json["name"])
-        return cls(str(hmm_json["name"]), str(hmm_json["description"]), int(hmm_json["length"]),
-                   int(hmm_json["cutoff"]), subtypes,
+        return cls(str(hmm_json["name"]), str(hmm_json["description"]), str(hmm_json["type"]),
+                   int(hmm_json["length"]), int(hmm_json["cutoff"]), subtypes,
                    tuple(Reaction.from_json(reaction, compound_groups)
                          for reaction in hmm_json["reactions"]))
 
