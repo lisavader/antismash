@@ -4,6 +4,7 @@
 # for test files, silence irrelevant and noisy pylint warnings
 # pylint: disable=use-implicit-booleaness-not-comparison,protected-access,missing-docstring
 
+import dataclasses
 import unittest
 from unittest.mock import Mock, patch
 
@@ -12,79 +13,115 @@ from antismash.common.secmet.test.helpers import DummyRecord
 from antismash.modules.terpene.results import (
     CompoundGroup,
     Reaction,
+    TerpeneHMM,
     DomainPrediction,
     ProtoclusterPrediction,
-    TerpeneResults
+    TerpeneResults,
+    MissingCompoundError,
+    MissingHmmError
 )
 
-existing_compound_groups = {
-    "GFPP": CompoundGroup(
-        name = "GFPP",
-        extended_name = "geranylfarnesyl diphosphate",
-        single_compound = True,
-        biosynthetic_class = "sesterterpene",
-        biosynthetic_subclass = None,
-        chain_length = 25,
-        initial_cyclisations = tuple(),
-        functional_groups = ("PP",)),
+## BUILD DUMMY DATA CLASSES ##
 
-    "C40_carotenoid": CompoundGroup(
-        name = "C40_carotenoid",
-        extended_name = None,
-        single_compound = False,
-        biosynthetic_class = "tetraterpene",
-        biosynthetic_subclass = "C40 carotenoid",
-        chain_length = 40,
-        initial_cyclisations = ("unknown",),
-        functional_groups = ("unknown",))
-}
+def build_dummy_compound_groups():
+    return {
+        "GFPP": CompoundGroup(
+            name = "GFPP",
+            extended_name = "geranylfarnesyl diphosphate",
+            single_compound = True,
+            biosynthetic_class = "sesterterpene",
+            biosynthetic_subclass = None,
+            chain_length = 25,
+            initial_cyclisations = tuple(),
+            functional_groups = ("PP",)),
 
-dummy_compound_group = CompoundGroup(
-    name = "Compound",
-    extended_name = "Longname",
-    single_compound = True,
-    biosynthetic_class = "diterpene",
-    biosynthetic_subclass = "indole diterpenoid",
-    chain_length = 20,
-    initial_cyclisations = ["C6-C11", "C10-C15"],
-    functional_groups = ["OH", "PP", "epoxy", "indole"])
+        "C40_carotenoid": CompoundGroup(
+            name = "C40_carotenoid",
+            extended_name = None,
+            single_compound = False,
+            biosynthetic_class = "tetraterpene",
+            biosynthetic_subclass = "C40 carotenoid",
+            chain_length = 40,
+            initial_cyclisations = ("unknown",),
+            functional_groups = ("unknown",))
+    }
 
-dummy_reaction = Reaction(substrates = (existing_compound_groups["GFPP"],),
-                          products = (existing_compound_groups["C40_carotenoid"],))
+def build_dummy_reaction():
+    return Reaction(substrates = (build_dummy_compound_groups()["GFPP"],),
+                    products = (build_dummy_compound_groups()["C40_carotenoid"],))
 
-dummy_domain1 = DomainPrediction(type = "T1TS", subtypes = ("T1TS_Bas_a",),
-                         start = 1, end = 200, reactions = (dummy_reaction,))
-dummy_domain2 = DomainPrediction(type = "PT_phytoene_like", subtypes = tuple(),
-                               start = 220, end = 400, reactions = tuple())
+def build_dummy_domain():
+    return DomainPrediction(type = "T1TS", subtypes = ("T1TS_Bas_a",),
+                         start = 1, end = 200, reactions = (build_dummy_reaction(),))
 
-dummy_cds_preds = {
-"cds1": [dummy_domain1, dummy_domain2],
-"cds2": []
-}
+def build_dummy_cds_preds():
+    return {"cds1": [build_dummy_domain()],
+            "cds2": []}
 
-dummy_cluster_pred = ProtoclusterPrediction(cds_predictions = dummy_cds_preds)
+def build_dummy_cluster_pred():
+    return ProtoclusterPrediction(cds_predictions = build_dummy_cds_preds(),)
+
+def build_dummy_terpene_hmms():
+    return {"PT_FPP_bact": TerpeneHMM(
+            name = "PT_FPP_bact",
+            description = "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
+            length = 265,
+            cutoff = 250,
+            subtypes = tuple(),
+            reactions = (build_dummy_reaction(),))
+            }
+
+## FAKE DATA ##
+
+fake_reaction_data = {"substrates" : ["Fake1","Fake2"],
+                      "products" : ["Fake3"]}
+
+fake_hmm_data = {"name": "PT_FPP_bact",
+                "description": "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
+                "length": 265,
+                "cutoff": 250,
+                "subtypes": ["Fake_subtype"],
+                "reactions": [fake_reaction_data]}
+
+fake_cluster_data = {"cds_preds": {},
+                     "products": ["Fake1","Fake2"]}
 
 class TestJSONConversion(unittest.TestCase):
+    def test_compound_regeneration(self):
+        compound = build_dummy_compound_groups()["GFPP"]
+        regenerated = CompoundGroup.from_json(json.loads(json.dumps(compound.to_json())))
+        assert regenerated == compound
+
+    def test_reaction_regeneration(self):
+        reaction = build_dummy_reaction()
+        regenerated = Reaction.from_json(json.loads(json.dumps(reaction.to_json())), build_dummy_compound_groups())
+        assert regenerated == reaction
+
+    def test_domain_pred_regeneration(self):
+        pred = build_dummy_domain()
+        regenerated = DomainPrediction.from_json(json.loads(json.dumps(pred.to_json())), build_dummy_compound_groups())
+        assert regenerated == pred
+
+    def test_cluster_pred_regeneration(self):
+        pred = build_dummy_cluster_pred()
+        pred.add_product(build_dummy_compound_groups()["GFPP"])
+        regenerated = ProtoclusterPrediction.from_json(json.loads(json.dumps(pred.to_json())), build_dummy_compound_groups())
+        assert regenerated == pred
+
     def test_regeneration(self):
         record = DummyRecord()
         results = TerpeneResults(record.id)
-        results.cluster_predictions = {1: dummy_cluster_pred}
+        results.cluster_predictions = {1: build_dummy_cluster_pred()}
         regenerated = TerpeneResults.from_json(json.loads(json.dumps(results.to_json())), record)
         assert regenerated.cluster_predictions == results.cluster_predictions
-"""
-    def test_cluster_prediction(self):
-        self.fail()
-
 
     def test_missing_compounds(self):
-        pred = Predction()
         with self.assertRaises(MissingCompoundError):
-            pred.from_json()
-        full_results = Results(pred)
-
-        res = Results.from_json(pred.to_json())
-        assert res is None
-"""
+            Reaction.from_json(fake_reaction_data, build_dummy_compound_groups())
+        with self.assertRaises(MissingCompoundError):
+            ProtoclusterPrediction.from_json(fake_cluster_data, build_dummy_compound_groups())
+        with self.assertRaises(MissingHmmError):
+            TerpeneHMM.from_json(fake_hmm_data, build_dummy_terpene_hmms(), build_dummy_compound_groups())
 
 """
 class TestAnalysis(unittest.TestCase):
