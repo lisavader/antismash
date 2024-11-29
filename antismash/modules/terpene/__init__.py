@@ -84,37 +84,7 @@ def prepare_data(logging_only: bool = False) -> list[str]:
 
     # the path to the combined data file of all hmms
     all_hmms = path.get_full_path(__file__, 'data', 'all_profiles.hmm')
-
-    outdated = False
-    if not path.locate_file(all_hmms):
-        logging.debug("%s: %s doesn't exist, regenerating", NAME, all_hmms)
-        outdated = True
-    else:
-        all_hmms_timestamp = os.path.getmtime(all_hmms)
-        for component in hmm_files:
-            if os.path.getmtime(component) > all_hmms_timestamp:
-                logging.debug("%s out of date, regenerating", all_hmms)
-                outdated = True
-                break
-
-    # regenerate if missing or out of date
-    if outdated:
-        # try to generate file from hmm files in data directory
-        try:
-            with open(all_hmms, "w", encoding="utf-8") as all_hmms_handle:
-                for hmm_file in hmm_files:
-                    with open(path.get_full_path(__file__, hmm_file), "r", encoding="utf-8") as handle:
-                        all_hmms_handle.write(handle.read())
-        except OSError:
-            if not logging_only:
-                raise
-            failure_messages.append(f"Failed to generate file {all_hmms!r}")
-
-    # if regeneration failed, don't try to run hmmpress
-    if failure_messages:
-        return failure_messages
-
-    failure_messages.extend(hmmer.ensure_database_pressed(all_hmms, return_not_raise=logging_only))
+    failure_messages.extend(hmmer.aggregate_profiles(all_hmms, hmm_files, return_not_raise=logging_only))
 
     return failure_messages
 
