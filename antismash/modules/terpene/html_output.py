@@ -63,7 +63,7 @@ def format_domain_types(domain_preds) -> str:
     types = []
     for domain_pred in domain_preds:
         types.append(domain_pred.type)
-    return " - ".join(types)
+    return " + ".join(types)
 
 def generate_html(region_layer: RegionLayer, results: TerpeneResults,
                   _record_layer: RecordLayer, _options_layer: OptionsLayer

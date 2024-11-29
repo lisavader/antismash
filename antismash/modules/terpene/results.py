@@ -5,7 +5,7 @@
 
 import logging
 from typing import Any, Optional, Self
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from functools import cached_property
 
 from antismash.common.module_results import ModuleResults
@@ -20,7 +20,7 @@ class MissingHmmError(ValueError):
     pass
 
 
-@dataclass(frozen = True, slots = True)
+@dataclass(frozen=True, slots=True)
 class CompoundGroup():
     """ Biosynthetic and chemical properties for a group of compounds.
     """
@@ -71,7 +71,10 @@ class CompoundGroup():
 
     def to_json(self) -> dict[str, Any]:
         """ Returns a JSON-friendly representation """
-        return {key: getattr(self, key) for key in self.__slots__}
+        return asdict(self)
+
+    def __hash__(self) -> int:
+        return hash(self.name)
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Self:
@@ -133,31 +136,12 @@ class TerpeneHMM:
     cutoff: int
     subtypes: tuple["TerpeneHMM", ...]
     reactions: tuple[Reaction, ...]
-    __parents: list[str] = field(default_factory = list)
-    __main_type: str = ""
 
-    @property
-    def parents(self) -> list[str]:
-        """ Returns the parents of the profile """
-        return self.__parents
-
-    @cached_property
-    def main_type(self) -> str:
-        """ Returns the main type of the profile """ #lookup name in name_to_type dict
-        return self.__main_type
-
-    def is_subtype(self) -> bool:
-        """ Returns whether the profile is a subtype of a another profile """
-        return bool(self.__parents)
-
-    def add_parent(self, parent: str) -> None:
-        """ Adds a parent to parents """
-        self.__parents.append(parent)
-
-    def add_main_type(self, main_type: str) -> None:
-        """ Adds the main type of the profile, if it doesn't exist """
-        if not self.__main_type:
-            self.__main_type = main_type
+    def __post_init__(self) -> None:
+        for reactions in self.reactions:
+            first = reactions[0]
+            if any(reaction.substrates == first.substrates for reaction in reactions[1:]):
+                raise ValueError("All profile reactions must have mutually exclusive substrates")
 
     @classmethod
     def from_json(cls, hmm_json: dict[str, Any], terpene_hmms: dict[str, "TerpeneHMM"],
@@ -167,8 +151,6 @@ class TerpeneHMM:
             subtypes = tuple(terpene_hmms[name] for name in hmm_json["subtypes"])
         except KeyError as key:
             raise MissingHmmError(f"'{hmm_json['name']}': Subtype {key} not defined yet")
-        for subtype in subtypes:
-            subtype.add_parent(hmm_json["name"])
         return cls(str(hmm_json["name"]), str(hmm_json["description"]), str(hmm_json["type"]),
                    int(hmm_json["length"]), int(hmm_json["cutoff"]), subtypes,
                    tuple(Reaction.from_json(reaction, compound_groups)
@@ -191,7 +173,7 @@ class DomainPrediction:
 
     def to_json(self) -> dict[str, Any]:
         """ Returns a JSON-friendly representation """
-        data = {key: getattr(self, key) for key in self.__slots__}
+        data = asdict(self)
         reactions = data.pop("reactions")
         if reactions:
             data["reactions"] = [reaction.to_json() for reaction in reactions]
