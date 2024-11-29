@@ -4,10 +4,8 @@
 """ A collection of functions for running hmmscan.
 """
 
-import os
 from io import StringIO
 from typing import List
-from enum import unique, Enum
 
 from .base import execute, get_config, SearchIO
 
@@ -28,15 +26,9 @@ def _find_error(output: list[str]) -> str:
     # in the worst case, return a default
     return "unknown error"
 
-@unique
-class OutputType(Enum):
-  STANDARD = 1
-  TABULAR = 2
-
 
 def run_hmmscan(target_hmmfile: str, query_sequence: str, opts: List[str] = None,
-                results_file: str = None,
-                output_type: OutputType = OutputType.STANDARD) -> list[SearchIO._model.query.QueryResult]:
+                results_file: str = None) -> list[SearchIO._model.query.QueryResult]:
     """ Runs hmmscan on the inputs and return a list of QueryResults
 
         Arguments:
@@ -44,7 +36,6 @@ def run_hmmscan(target_hmmfile: str, query_sequence: str, opts: List[str] = None
             query_sequence: a string containing input sequences in fasta format
             opts: a list of extra arguments to pass to hmmscan, or None
             results_file: a path to keep a copy of hmmscan results in, if provided
-            output_type: an enum representing the hmmscan output type
 
         Returns:
             a list of QueryResults as parsed from hmmscan output by SearchIO
@@ -52,7 +43,6 @@ def run_hmmscan(target_hmmfile: str, query_sequence: str, opts: List[str] = None
     """
     if not query_sequence:
         raise ValueError("Cannot run hmmscan on empty sequence")
-    assert isinstance(output_type, OutputType), f"Argument output_type is {type(output_type)} not OutputType"
 
     config = get_config()
     command = [config.executables.hmmscan, "--cpu", str(config.cpus), "--nobias"]
@@ -61,9 +51,6 @@ def run_hmmscan(target_hmmfile: str, query_sequence: str, opts: List[str] = None
     if " --cpu " not in run_hmmscan_help():
         command = command[0:1] + command[3:]
 
-    if output_type == OutputType.TABULAR:
-        command.extend(["-o", os.devnull,  # throw away the standard output
-                        "--domtblout", "result.domtab"])
     if opts is not None:
         command.extend(opts)
     command.extend([target_hmmfile, '-'])
@@ -78,10 +65,7 @@ def run_hmmscan(target_hmmfile: str, query_sequence: str, opts: List[str] = None
         with open(results_file, "w", encoding="utf-8") as handle:
             handle.write(result.stdout)
 
-    if output_type == OutputType.STANDARD:
-        return list(SearchIO.parse(StringIO(result.stdout), 'hmmer3-text'))
-    elif output_type == OutputType.TABULAR:
-        return list(SearchIO.parse("result.domtab", "hmmscan3-domtab"))
+    return list(SearchIO.parse(StringIO(result.stdout), 'hmmer3-text'))
 
 
 def run_hmmscan_help() -> str:
