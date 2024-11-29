@@ -174,12 +174,6 @@ class TestAnalysis(unittest.TestCase):
         expected_groups = [[hmm_results[2],hmm_results[1]], [hmm_results[0]]]
         assert groups == expected_groups
 
-    def test_filter_overlaps(self):
-        hmm_results = build_dummy_hmm_results()[1:5]
-        filtered = terpene_analysis.filter_overlaps(hmm_results, terpene_analysis._load_hmm_properties())
-        expected_filtered = [hmm_results[1]]
-        assert filtered == expected_filtered
-
     def test_merge_reactions_by_substrate(self):
         reaction1 = build_dummy_reaction(substrates=(
                                             DummyCompoundGroup(name="compound1"),DummyCompoundGroup(name="compound2")

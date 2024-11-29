@@ -12,15 +12,12 @@ from collections import defaultdict
 from antismash.common import fasta, path
 from antismash.common.hmmscan_refinement import HMMResult, refine_hmmscan_results, QueryResult
 from antismash.common.secmet import Protocluster, CDSFeature
-from antismash.common.subprocessing.hmmscan import run_hmmscan, OutputType
+from antismash.common.subprocessing.hmmscan import run_hmmscan
 
 from .results import ProtoclusterPrediction, DomainPrediction, Reaction, TerpeneHMM, CompoundGroup
 from .load_json import load_json
 
 _HMM_PROPERTIES_CACHE: dict[str, TerpeneHMM] = {}
-
-_TOP_LEVEL_HMMS = {"PT_phytoene_like", "phytoene_synt," "Lycopene_cycl", "Lycopene_cycl_fung",
-                    "PT_FPPS_like", "T1TS", "T1TS_KS", "T2TS", "TS_UbiA", "TS_Pyr4"}
 
 _MAIN_TYPES_ORDER = ("PT_FPPS_like",
                      "PT_phytoene_like",
@@ -67,8 +64,7 @@ def run_terpene_hmmscan(cds_features: Iterable[CDSFeature]) -> list[QueryResult]
     """
     cluster_fasta = fasta.get_fasta_from_features(cds_features)
     hmm_file = path.get_full_path(__file__, "data", "all_profiles.hmm")
-    hmmscan_results = run_hmmscan(target_hmmfile = hmm_file, query_sequence = cluster_fasta,
-                                  output_type = OutputType.TABULAR)
+    hmmscan_results = run_hmmscan(target_hmmfile = hmm_file, query_sequence = cluster_fasta)
 
     return hmmscan_results
 
@@ -106,54 +102,10 @@ def group_hmm_results(hmm_results: list[HMMResult]) -> list[list[HMMResult]]:
     return groups
 
 
-def filter_overlaps(hmm_results: list[HMMResult],
-                    hmm_properties: dict[str, TerpeneHMM]) -> list[HMMResult]:
-    """ Finds the best results within overlapping hits
-    """
-    results_by_name = {}
-    for result in hmm_results:
-        results_by_name[result.hit_id] = []
-    for name in results_by_name:
-        if name in _TOP_LEVEL_HMMS:
-            print(name)
-    raise NotImplementedError()
-
-def remove_overlapping(hmm_results: list[HMMResult],
-                       hmm_properties: dict[str, TerpeneHMM]) -> list[HMMResult]:
-    """ Filters overlapping hmm results, keeping the hit with the lowest evalue.
-        If the evalues are too similar, both hits are kept.
-        Domains with an overlap of 20% or less aren't considered to be overlapping
-    """
-    non_overlapping = []
-    if hmm_results:
-        non_overlapping = [hmm_results[0]]
-        for result in hmm_results[1:]:
-            previous = non_overlapping[-1]
-            maxoverlap = 0.20 * max(hmm_properties[result.hit_id].length,
-                                hmm_properties[previous.hit_id].length)
-            if result.query_start < (previous.query_end - maxoverlap):
-                # Keep the current result if the current result scores significantly better
-                if math.log10(result.evalue) < 1.5 * math.log10(previous.evalue):
-                    non_overlapping[-1] = result
-                # Keep the previous result if the previous result scores significantly better
-                elif math.log10(previous.evalue) < 1.5 * math.log10(result.evalue):
-                    pass
-                # Keep both results if there is not substantial difference in evalues
-                else:
-                    non_overlapping.append(result)
-            else:
-                non_overlapping.append(result)
-    return non_overlapping
-
-
 def merge_reactions_by_substrate(profiles: list[TerpeneHMM] #have hmms as input
                       ) -> tuple[Reaction, ...]:
     if not profiles:
         return tuple()
-
-    # each tuple is a set of reactions from a single profile/HMM
-    # of which none will have multiple reactions with the same substrate
-
 
     # gather all reactions from all groups with the same substrate
     reactions_by_substrate: dict[tuple[CompoundGroup, ...], list[Reaction]] = defaultdict(list)
@@ -162,7 +114,7 @@ def merge_reactions_by_substrate(profiles: list[TerpeneHMM] #have hmms as input
             reactions_by_substrate[reaction.substrates].append(reaction)
 
     # find the substrates which are present in all groups
-    intersecting_groups = {sub: reactions for sub, reactions in reactions_by_substrate.items() if len(reactions) == len(reaction_groups)}
+    intersecting_groups = {sub: reactions for sub, reactions in reactions_by_substrate.items() if len(reactions) == len(profiles)}
     # if no substrates are present in all groups, return nothing
     if not intersecting_groups:
         return tuple()
@@ -193,21 +145,11 @@ def get_domain_prediction(hmm_results: list[HMMResult],
     """
     start = min(hmm_result.query_start for hmm_result in hmm_results)
     end = max(hmm_result.query_end for hmm_result in hmm_results)
-    main_types = set()
-    subtypes = set()
-    reaction_groups = []
-    profiles = []
-    for hmm_result in hmm_results:
-        hmm = hmm_properties[hmm_result.hit_id]
-        main_types.add(hmm.type)
-        subtype_names = [subtype.name for subtype in hmm_properties[hmm.type].subtypes]
-        if hmm_result.hit_id in subtype_names:
-            subtypes.add(hmm_result.hit_id)
-        if hmm.reactions:
-            reaction_groups.append(hmm.reactions)
-            profiles.append(hmm)
+    profiles = [hmm_properties[hmm_result.hit_id] for hmm_result in hmm_results]
+    main_types = set(profile.type for profile in profiles)
+    subtypes = set(profile.name for profile in profiles if profile.is_subtype)
     if len(main_types) > 1:
-        logging.warning("Overlapping hits for different main types.")
+        logging.debug("Overlapping hits for different main types.")
         type = "ambiguous hit"
         subtypes = []
     else:
@@ -235,7 +177,6 @@ def get_cds_predictions(hmm_results_per_cds: dict[str, list[HMMResult]],
         # Add a domain prediction for each group
         for group in grouped_results:
             cds_predictions[cds_name].append(get_domain_prediction(group, hmm_properties))
-            print(get_domain_prediction(group, hmm_properties))
     return cds_predictions
 
 
@@ -269,7 +210,5 @@ def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
     hmmscan_results = run_terpene_hmmscan(cluster.cds_children)
     refined_results = refine_hmmscan_results(hmmscan_results, hmm_lengths, remove_incomplete_only = True) #replace with remove_incomplete
     refined_results = filter_by_score(refined_results, hmm_properties)
-    print(refined_results)
-    #refined_results = filter_overlaps(refined_results, hmm_properties)
     cds_predictions = get_cds_predictions(refined_results, hmm_properties)
     return get_cluster_prediction(cds_predictions)

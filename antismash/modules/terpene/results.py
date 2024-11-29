@@ -144,13 +144,22 @@ class TerpeneHMM:
     cutoff: int
     subtypes: tuple["TerpeneHMM", ...]
     reactions: tuple[Reaction, ...]
+    __is_subtype: bool = False
 
     def __post_init__(self) -> None:
+        for subtype in self.subtypes:
+            subtype.mark_as_subtype()
         if self.reactions:
             first = self.reactions[0]
             for reaction in self.reactions[1:]:
                 if any(substrate in first.substrates for substrate in reaction.substrates):
                     raise ValueError("All profile reactions must have mutually exclusive substrates")
+
+    def is_subtype(self) -> bool:
+        return self.__is_subtype()
+
+    def mark_as_subtype(self) -> None:
+        self.__is_subtype = True
 
     @classmethod
     def from_json(cls, hmm_json: dict[str, Any], terpene_hmms: dict[str, "TerpeneHMM"],
