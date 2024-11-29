@@ -38,6 +38,17 @@ class DummyCompoundGroup(CompoundGroup):
         super().__init__(name, extended_name, single_compound, biosynthetic_class,
                          biosynthetic_subclass, chain_length, initial_cyclisations, functional_groups)
 
+class DummyTerpeneHMM(TerpeneHMM):
+    def __init__(self,
+                name = "PT_FPP_bact",
+                description = "Prenyltransferase; Farnesyl diphosphate synthase, bacterial",
+                type = "PT_FPPS_like",
+                length = 265,
+                cutoff = 250,
+                subtypes = tuple(),
+                reactions = tuple()):
+        super().__init__(name, description, type, length, cutoff, subtypes, reactions)
+
 def build_existing_compound_groups():
     return {
         "GFPP": CompoundGroup(
@@ -107,7 +118,7 @@ fake_hmm_data = {"name": "PT_FPP_bact",
                 "subtypes": ["Fake_subtype"],
                 "reactions": [fake_reaction_data]}
 
-fake_cluster_data = {"cds_preds": {},
+fake_cluster_data = {"cds_predictions": {},
                      "products": ["Fake1","Fake2"]}
 
 class TestJSONConversion(unittest.TestCase):
@@ -129,7 +140,9 @@ class TestJSONConversion(unittest.TestCase):
     def test_cluster_pred_regeneration(self):
         pred = build_dummy_cluster_pred()
         pred.add_product(build_existing_compound_groups()["GFPP"])
-        regenerated = ProtoclusterPrediction.from_json(json.loads(json.dumps(pred.to_json())), build_existing_compound_groups())
+        raw = json.loads(json.dumps(pred.to_json()))
+        regenerated = ProtoclusterPrediction.from_json(raw, build_existing_compound_groups())
+        assert regenerated.to_json() == pred.to_json()
         assert regenerated == pred
 
     def test_regeneration(self):
@@ -147,6 +160,12 @@ class TestJSONConversion(unittest.TestCase):
         with self.assertRaises(MissingHmmError):
             TerpeneHMM.from_json(fake_hmm_data, build_dummy_terpene_hmms(), build_existing_compound_groups())
 
+class TestDatatypes(unittest.TestCase):
+    def test_hmm_substrates(self):
+        reaction1 = build_dummy_reaction(substrates=(DummyCompoundGroup(name="compound1"),DummyCompoundGroup(name="compound2"),))
+        reaction2 = build_dummy_reaction(substrates=(DummyCompoundGroup(name="compound1"),))
+        with self.assertRaises(ValueError):
+            DummyTerpeneHMM(reactions=(reaction1, reaction2,))
 
 class TestAnalysis(unittest.TestCase):
     def test_group_hmms(self):

@@ -148,12 +148,10 @@ def remove_overlapping(hmm_results: list[HMMResult],
 
 def merge_reactions_by_substrate(profiles: list[TerpeneHMM] #have hmms as input
                       ) -> tuple[Reaction, ...]:
-
-
     if not profiles:
         return tuple()
 
-    # each tuple is a set of reactions from a single profile/HMM #move to tests
+    # each tuple is a set of reactions from a single profile/HMM
     # of which none will have multiple reactions with the same substrate
 
 

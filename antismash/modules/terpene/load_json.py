@@ -1,8 +1,7 @@
 
-import json
 from typing import Any
 
-from antismash.common import path
+from antismash.common import json, path
 
 def load_json(json_file: str) -> list[dict[str, Any]]:
     """ Load a json file that's present in data """
