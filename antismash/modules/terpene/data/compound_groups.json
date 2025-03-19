@@ -39,18 +39,6 @@
             ]
         },
         {
-            "name": "acoradiene",
-            "extended_name": null,
-            "single_compound": true,
-            "biosynthetic_class": "sesquiterpene",
-            "biosynthetic_subclass": null,
-            "chain_length": 15,
-            "initial_cyclisations": [
-                "C1-C6"
-            ],
-            "functional_groups": []
-        },
-        {
             "name": "aristolochene",
             "extended_name": null,
             "single_compound": true,
