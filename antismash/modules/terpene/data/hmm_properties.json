@@ -700,11 +700,11 @@
             ]
         },
         {
-            "name": "T1TS_TRI",
-            "description": "Type 1 terpene synthase; Trichodiene synthase type",
+            "name": "T1TS_TRI5",
+            "description": "Type 1 terpene synthase; Trichodiene synthase",
             "type": "T1TS",
             "length": 305,
-            "cutoff": 237,
+            "cutoff": 436,
             "subtypes": [],
             "reactions": [
                 {
@@ -712,8 +712,27 @@
                         "FPP"
                     ],
                     "products": [
-                        "trichodiene",
-                        "acoradiene"
+                        "trichodiene"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "T1TS_TRI5_like",
+            "description": "Type 1 terpene synthase; Trichodiene synthase like",
+            "type": "T1TS",
+            "length": 305,
+            "cutoff": 237,
+            "subtypes": [
+                "T1TS_TRI5"
+            ],
+            "reactions": [
+                {
+                    "substrates": [
+                        "FPP"
+                    ],
+                    "products": [
+                        "sesquiterpene_C1-C6"
                     ]
                 }
             ]
@@ -744,7 +763,7 @@
                 "T1TS_KS",
                 "T1TS_LATES",
                 "T1TS_MIBS",
-                "T1TS_TRI"
+                "T1TS_TRI5_like"
             ],
             "reactions": []
         },
