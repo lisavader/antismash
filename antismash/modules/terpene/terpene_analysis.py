@@ -10,14 +10,16 @@ from collections import defaultdict
 
 from antismash.common import fasta, path
 from antismash.common.hmmscan_refinement import HMMResult, QueryResult, refine_hmmscan_results
-from antismash.common.secmet import Protocluster, CDSFeature
+from antismash.common.secmet import Record, Protocluster, CDSFeature
+from antismash.common.subprocessing.hmmpfam import run_hmmpfam2
 from antismash.common.subprocessing.hmmscan import run_hmmscan
+from antismash.common.utils import get_query_positions_from_alignment
 
 from .data_loader import (
-    CompoundGroup, Reaction, Relationship, TerpeneHMM,
+    CompoundGroup, Motif, Reaction, Relationship, TerpeneHMM,
     load_hmm_lengths, load_hmm_properties, load_relationships,
     )
-from .results import ProtoclusterPrediction, DomainPrediction
+from .results import Activity, DomainPrediction, MotifResult, ProtoclusterPrediction
 
 
 _MAIN_TYPE_PRIORITY = {val: i for i, val in enumerate([
@@ -194,9 +196,46 @@ def merge_reactions_by_substrate(profiles: list[TerpeneHMM]
     return tuple(results)
 
 
+def extract_motif(query: str, hit: QueryResult, domain_start: int,
+                   motif: Motif) -> MotifResult:
+    query_positions = get_query_positions_from_alignment(hit, motif.positions)
+    if not query_positions:
+        return MotifResult(name=motif.name, active=False)
+    query_residues = [query[i] for i in query_positions]
+    # Check if the positions match the expected amino acids for the motif
+    active = True
+    for query_residue, allowed_residues in zip(query_residues, motif.allowed_residues):
+        if not query_residue in allowed_residues:
+            active = False
+            break
+    start = query_positions[0]
+    end = query_positions[-1]+1 # Python-style exclusive end position
+    motif_seq = query[start:end]
+    motif_start = start + domain_start
+    motif_end = end + domain_start
+    return MotifResult(name=motif.name, active=active, sequence=motif_seq, start=motif_start, end=motif_end)
+
+
+def get_motif_results(cds_translation: str, domain_start: int, domain_end: int,
+                      types: set[str], hmm_properties: dict[str, TerpeneHMM]
+                      ) -> tuple[MotifResult, ...]:
+    hmm_file = path.get_full_path(__file__, "data", "main_profiles.hmm")
+    query = cds_translation[domain_start:domain_end]
+    assert len(query) == domain_end-domain_start, "Domain indexes out of range"
+
+    hmmpfam_results = run_hmmpfam2(hmm_file, f">query\n{query}")
+    hits = hmmpfam_results[0].hsps
+    for hit in sorted(hits, key=lambda hit: hit.evalue):
+        if hit.hit.id in types:
+            profile = hmm_properties[hit.hit.id]
+            return tuple(extract_motif(query, hit, domain_start, motif) for motif in profile.motifs)
+    return tuple()
+
+
 def get_domain_prediction(hmm_results: list[HMMResult],
                           hmm_properties: dict[str, TerpeneHMM],
-                          relationships: dict[str, Relationship]) -> DomainPrediction:
+                          relationships: dict[str, Relationship],
+                          cds_translation: str) -> DomainPrediction:
     """ Converts a list of HMMResults to a DomainPrediction
 
         Arguments:
@@ -215,18 +254,31 @@ def get_domain_prediction(hmm_results: list[HMMResult],
         logging.debug("Ambiguous hit detected.")
         return DomainPrediction(domain_type="ambiguous", subtypes=tuple(),
                                 start=start, end=end,
-                                reactions=tuple())
+                                reactions=tuple(),
+                                motif_results=tuple(), activity=Activity.UNKNOWN)
 
+    all_types = main_types | subtypes
     domain_type = main_types.pop()
     final_reactions = merge_reactions_by_substrate(profiles)
+    motif_results = get_motif_results(cds_translation, start, end, all_types, hmm_properties)
+
+    if not motif_results:
+        activity = Activity.UNKNOWN
+    elif all(result.active for result in motif_results):
+        activity = Activity.ACTIVE
+    else:
+        activity = Activity.INACTIVE
+
     return DomainPrediction(domain_type=domain_type, subtypes=tuple(subtypes),
                             start=start, end=end,
-                            reactions=final_reactions)
+                            reactions=final_reactions,
+                            motif_results=motif_results, activity=activity)
 
 
 def get_cds_predictions(hmm_results_per_cds: dict[str, list[HMMResult]],
                         hmm_properties: dict[str, TerpeneHMM],
-                        relationships: dict[str, Relationship]) -> dict[str, list[DomainPrediction]]:
+                        relationships: dict[str, Relationship],
+                        cds_by_name: dict[str, CDSFeature]) -> dict[str, list[DomainPrediction]]:
     """ Convert list of HMMResults in CDS mapping to a list of DomainPredictions
 
         Arguments:
@@ -238,10 +290,12 @@ def get_cds_predictions(hmm_results_per_cds: dict[str, list[HMMResult]],
     cds_predictions: dict[str, list[DomainPrediction]] = defaultdict(list)
 
     for cds_name, hmm_results in hmm_results_per_cds.items():
+        cds_translation = cds_by_name[cds_name].translation
         grouped_results = group_hmm_results(hmm_results)
         # Add a domain prediction for each group
         for group in grouped_results:
-            cds_predictions[cds_name].append(get_domain_prediction(group, hmm_properties, relationships))
+            domain = get_domain_prediction(group, hmm_properties, relationships, cds_translation)
+            cds_predictions[cds_name].append(domain)
     return cds_predictions
 
 
@@ -280,7 +334,7 @@ def get_cluster_prediction(cds_predictions: dict[str, list[DomainPrediction]]) -
     return cluster_pred
 
 
-def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
+def analyse_cluster(cluster: Protocluster, record: Record) -> ProtoclusterPrediction:
     """ Analyse a terpene cluster
 
         Arguments:
@@ -298,5 +352,6 @@ def analyse_cluster(cluster: Protocluster) -> ProtoclusterPrediction:
     refined_results = refine_hmmscan_results(hmmscan_results, hmm_lengths,
                                              preservation_mode=True)
     refined_results = filter_by_score(refined_results, hmm_properties)
-    cds_predictions = get_cds_predictions(refined_results, hmm_properties, relationships)
+    cds_predictions = get_cds_predictions(refined_results, hmm_properties,
+                                          relationships, record.get_cds_name_mapping())
     return get_cluster_prediction(cds_predictions)

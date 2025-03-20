@@ -9,12 +9,13 @@ from unittest.mock import Mock, patch
 
 from antismash.common import json
 from antismash.common.layers import OptionsLayer, RecordLayer, RegionLayer
-from antismash.common.test.helpers import DummyHMMResult, get_simple_options
+from antismash.common.test.helpers import DummyCDS, DummyHMMResult, get_simple_options
 from antismash.common.secmet.test.helpers import DummyRecord, DummyRegion
 from antismash.modules.terpene.data_loader import (
     CompoundGroup,
     MissingCompoundError,
     MissingHmmError,
+    Motif,
     Reaction,
     Relationship,
     TerpeneHMM,
@@ -22,7 +23,9 @@ from antismash.modules.terpene.data_loader import (
     load_relationships,
 )
 from antismash.modules.terpene.results import (
+    Activity,
     DomainPrediction,
+    MotifResult,
     ProtoclusterPrediction,
     TerpeneResults,
 )
@@ -51,8 +54,12 @@ class DummyCompoundGroup(CompoundGroup):
 
 
 class DummyDomainPrediction(DomainPrediction):
-    def __init__(self, domain_type="T1TS", subtypes=None, start=1, end=200, reactions=None):
-        super().__init__(domain_type, subtypes or tuple(), start, end, reactions or tuple())
+    def __init__(self, domain_type="T1TS", subtypes=None, start=1, end=200, reactions=None,
+                 motif_results=None, activity=Activity.UNKNOWN,
+                 ):
+        super().__init__(domain_type, subtypes or tuple(), start, end, reactions or tuple(),
+                         motif_results or tuple(), activity
+                         )
 
 
 class DummyTerpeneHMM(TerpeneHMM):
@@ -63,8 +70,10 @@ class DummyTerpeneHMM(TerpeneHMM):
                  length=265,
                  cutoff=250,
                  subtypes=tuple(),
-                 reactions=tuple()):
-        super().__init__(name, description, domain_type, length, cutoff, subtypes, reactions)
+                 reactions=tuple(),
+                 motifs=tuple(),
+                 ):
+        super().__init__(name, description, domain_type, length, cutoff, subtypes, reactions, motifs)
 
 
 EXISTING_COMPOUND_GROUPS = {
@@ -98,7 +107,8 @@ def build_dummy_reaction(substrates=(EXISTING_COMPOUND_GROUPS["GFPP"],),
 
 def build_dummy_domain():
     return DomainPrediction(domain_type="T1TS", subtypes=("T1TS_Bas_a",),
-                            start=1, end=200, reactions=(build_dummy_reaction(),))
+                            start=1, end=200, reactions=(build_dummy_reaction(),),
+                            motif_results=tuple(), activity=Activity.UNKNOWN)
 
 
 def build_dummy_cds_preds():
@@ -122,6 +132,7 @@ def build_dummy_terpene_hmms():
             cutoff=250,
             subtypes=tuple(),
             reactions=(build_dummy_reaction(),),
+            motifs=tuple(),
         )
     }
 
@@ -152,6 +163,16 @@ class TestJSONConversion(TestCase):
         regenerated = Reaction.from_json(json.loads(json.dumps(reaction.to_json())),
                                          EXISTING_COMPOUND_GROUPS)
         assert regenerated == reaction
+
+    def test_motif_regeneration(self):
+        motif = Motif(name="name", positions=[0, 1], allowed_residues=["AV", "A"])
+        regenerated = Motif.from_json(json.loads(json.dumps(motif.to_json())))
+        assert regenerated == motif
+
+    def test_motif_result_regeneration(self):
+        motif_result = MotifResult(name="name", active=False, sequence="AAA", start=0, end=3)
+        regenerated = MotifResult.from_json(json.loads(json.dumps(motif_result.to_json())))
+        assert regenerated == motif_result
 
     def test_domain_pred_regeneration(self):
         pred = build_dummy_domain()
@@ -201,6 +222,15 @@ class TestDatatypes(TestCase):
         reaction2 = build_dummy_reaction(substrates=(DummyCompoundGroup(name="compound1"),))
         with self.assertRaises(ValueError):
             DummyTerpeneHMM(reactions=(reaction1, reaction2,))
+
+    def test_motif(self):
+        for string in ["B", "*", "-", "?"]:
+            with self.assertRaises(ValueError):
+                Motif(name="name", positions=[0, 1], allowed_residues=["AV", string])
+        with self.assertRaises(ValueError):
+            Motif(name="name", positions=[0, 1, 2], allowed_residues=["AV", "A"])
+        with self.assertRaises(ValueError):
+                Motif(name="name", positions=[1, 0], allowed_residues=["AV", string])
 
 
 class TestAnalysis(TestCase):
@@ -272,10 +302,57 @@ class TestAnalysis(TestCase):
         assert names(merged) == names(reaction1) == names(reaction2)
         assert merged.products == reaction2.products
 
+    def test_extract_motif(self):
+        query = Mock(seq="AAADAD")
+        ref = Mock(seq="AAADCD")
+        hit = Mock(aln=[query, ref], query_start=0)
+        motif = Motif(name="test_motif",
+                      positions=[3, 5],
+                      allowed_residues=["D", "DE"])
+
+        result = terpene_analysis.extract_motif(query.seq, hit, 10, motif)
+        assert result.name == "test_motif"
+        assert result.active
+        assert result.sequence == "DAD"
+        assert result.start == 13
+        assert result.end == 16
+
+        query.seq = query.seq[:-1]+"Q"
+        hit = Mock(aln=[query, ref], query_start=0)
+        result = terpene_analysis.extract_motif(query.seq, hit, 10, motif)
+        assert result.name == "test_motif"
+        assert not result.active
+        assert result.sequence == "DAQ"
+        assert result.start == 13
+        assert result.end == 16
+
+        query.seq = query.seq[:-1]+"-"
+        hit = Mock(aln=[query, ref], query_start=0)
+        result = terpene_analysis.extract_motif(query.seq, hit, 10, motif)
+        assert result.name == "test_motif"
+        assert not result.active
+        assert not result.sequence
+        assert not result.start
+        assert not result.end
+
+    def test_get_motif_results(self):
+        results = terpene_analysis.get_motif_results(cds_translation='A'*100,
+                                                     domain_start=0, domain_end=100,
+                                                     types={"T1TS_KS", "T1TS_PLE"},
+                                                     hmm_properties=_hmm_properties)
+        assert len(results) == 2
+        assert results[0].name == "DDxxD"
+
+        results = terpene_analysis.get_motif_results(cds_translation='A'*100,
+                                                     domain_start=0, domain_end=100,
+                                                     types={"Pyr4"},
+                                                     hmm_properties=_hmm_properties)
+        assert results == tuple()
+
     def test_get_domain_prediction(self):
         hmm_results = [DummyHMMResult(label="T1TS", start=1, end=50),
                        DummyHMMResult(label="T1TS_ARIS", start=30, end=100)]
-        domain_pred = terpene_analysis.get_domain_prediction(hmm_results, _hmm_properties, _relationships)
+        domain_pred = terpene_analysis.get_domain_prediction(hmm_results, _hmm_properties, _relationships, "A"*100)
 
         assert domain_pred.domain_type == "T1TS"
         assert domain_pred.subtypes == ("T1TS_ARIS",)
@@ -286,15 +363,18 @@ class TestAnalysis(TestCase):
     def test_ambiguous_multiple_types(self):
         hmm_results = [DummyHMMResult(label="T1TS", start=1, end=50),
                         DummyHMMResult(label="T2TS", start=30, end=100)]
-        domain_pred = terpene_analysis.get_domain_prediction(hmm_results, _hmm_properties, _relationships)
+        domain_pred = terpene_analysis.get_domain_prediction(hmm_results, _hmm_properties, _relationships, "A"*100)
         assert domain_pred.domain_type == "ambiguous"
         assert domain_pred.subtypes == tuple()
 
     def test_get_cds_predictions(self):
-        hmm_results_per_cds = {"cds1": [DummyHMMResult(label="T1TS", bitscore=300)]}
-        cds_preds = terpene_analysis.get_cds_predictions(hmm_results_per_cds, _hmm_properties, _relationships)
+        hmm_results_per_cds = {"cds1": [DummyHMMResult(label="T1TS", start=1, end=5, bitscore=300)]}
+        cds_preds = terpene_analysis.get_cds_predictions(hmm_results_per_cds, {"T1TS": DummyTerpeneHMM(domain_type="T1TS")},
+                                                         _relationships, {"cds1": DummyCDS()})
         assert cds_preds == {"cds1": [DomainPrediction(domain_type="T1TS", subtypes=tuple(),
-                                                       start=1, end=10, reactions=tuple())]}
+                                                       start=1, end=5, reactions=tuple(),
+                                                       motif_results=tuple(), activity=Activity.UNKNOWN,
+                                                       )]}
 
     def test_get_cluster_prediction(self):
         bad_product = DummyCompoundGroup(name="BadProduct")
